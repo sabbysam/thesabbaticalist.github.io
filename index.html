@@ -40,36 +40,64 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
       text-align: center;
       position: relative;
-      padding-top: 3rem;
+      overflow: hidden;
+      background: linear-gradient(to top, #ffecd2, #fcb69f);
+    }
+
+    .sunrise {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, #fff3b0, #fddbb0);
+      border-radius: 50%;
+      animation: riseSun 8s ease-out forwards;
+      z-index: 1;
+    }
+
+    @keyframes riseSun {
+      0% { top: 100%; opacity: 0; }
+      50% { opacity: 1; }
+      100% { top: 30%; opacity: 1; }
+    }
+
+    .mountains {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 60%;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Mountains_silhouette_2.svg/1024px-Mountains_silhouette_2.svg.png') bottom center repeat-x;
+      background-size: cover;
+      animation: parallax 30s linear infinite;
+      z-index: 2;
+    }
+
+    @keyframes parallax {
+      from { background-position-x: 0; }
+      to { background-position-x: -1000px; }
     }
 
     .overlay {
-      background-color: rgba(255,255,255,0.85);
+      position: relative;
+      z-index: 3;
       padding: 3rem;
+      background-color: rgba(255, 255, 255, 0.85);
       border-radius: 12px;
-      animation: fadeIn 2s ease forwards;
-      opacity: 0;
+      max-width: 700px;
     }
 
-    .section {
-      padding: 5rem 2rem;
-      max-width: 800px;
-      margin: auto;
-      opacity: 0;
-      transform: translateY(50px);
-      transition: opacity 1s ease, transform 1s ease;
-    }
-
-    .section.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    h1 {
+    .overlay h1 {
       font-size: 3.5rem;
       margin-bottom: 1rem;
+    }
+
+    .overlay p {
+      font-size: 1.25rem;
     }
 
     .cta-button {
@@ -88,69 +116,6 @@
       background-color: #4caf50;
       transform: scale(1.05);
     }
-
-    .footer {
-      text-align: center;
-      padding: 2rem;
-      background: #111;
-      color: white;
-    }
-
-    .sad-hero {
-      text-align: center;
-      margin: 4rem auto;
-    }
-
-    .sad-hero img {
-      width: 300px;
-      max-width: 90%;
-      border-radius: 12px;
-      margin-bottom: 1rem;
-    }
-
-    iframe {
-      width: 100%;
-      height: 500px;
-      border: none;
-      border-radius: 12px;
-    }
-
-    .emoji {
-      position: fixed;
-      font-size: 2rem;
-      z-index: 9999;
-      pointer-events: none;
-      animation: floatDown 4s linear infinite;
-    }
-
-    @keyframes floatDown {
-      0% { transform: translateY(-50px); opacity: 1; }
-      100% { transform: translateY(100vh); opacity: 0; }
-    }
-
-    .calendar-section {
-      background: #fff3e0;
-      padding: 4rem 2rem;
-      text-align: center;
-    }
-
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
-
-    .calendar-card {
-      background: #fff;
-      padding: 1rem;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .calendar-card h4 {
-      margin-bottom: 0.5rem;
-    }
   </style>
 </head>
 <body>
@@ -166,6 +131,8 @@
   </nav>
 
   <div class="hero">
+    <div class="sunrise"></div>
+    <div class="mountains"></div>
     <div class="overlay">
       <h1>Rediscover your time. Reclaim your life.</h1>
       <p>Take Time Off, On Purpose</p>
@@ -176,125 +143,5 @@
       </div>
     </div>
   </div>
-
-  <div class="sad-hero">
-    <img src="ChatGPT%20Image%20Mar%2026%2C%202025%2C%2007_08_55%20PM.png" alt="Sad Guy">
-    <p>Burnt out? Maybe it’s time for a reset.</p>
-  </div>
-
-  <section class="section" id="toolkit">
-    <h2>🛠️ Free Toolkit</h2>
-    <p>Grab our free sabbatical planning checklist and budget template.</p>
-    <a class="cta-button" href="https://drive.google.com">Get the Toolkit</a>
-  </section>
-
-  <section class="section" id="calculator">
-    <h2>💸 Sabbatical Budget Calculator</h2>
-    <p>Estimate your sabbatical expenses quickly:</p>
-    <form id="calcForm">
-      <label>Flights: <input type="number" id="flights" value="0" /></label><br/><br/>
-      <label>Accommodation: <input type="number" id="accom" value="0" /></label><br/><br/>
-      <label>Food: <input type="number" id="food" value="0" /></label><br/><br/>
-      <button type="submit" class="cta-button">Calculate Total</button>
-    </form>
-    <p id="totalDisplay"></p>
-  </section>
-
-  <section class="section" id="sabbatical-table">
-    <h2>📊 Explore a Real Sabbatical Plan</h2>
-    <p>Download our sabbatical plan template here:</p>
-    <a href="Final_365-Day_Sabbatical__Max_30_Days_Rule___Flight_Costs_.csv" class="cta-button" download>Download Template (CSV)</a>
-  </section>
-
-  <section class="calendar-section" id="calendar">
-    <h2>📅 Where to Go, Month by Month</h2>
-    <div class="calendar-grid">
-      <div class="calendar-card"><h4>January</h4><p>New Zealand – Summer hiking 🌿</p></div>
-      <div class="calendar-card"><h4>February</h4><p>Thailand – Dry season 🏝️</p></div>
-      <div class="calendar-card"><h4>March</h4><p>Japan – Cherry blossoms 🌸</p></div>
-      <div class="calendar-card"><h4>April</h4><p>Portugal – Shoulder season ☀️</p></div>
-      <div class="calendar-card"><h4>May</h4><p>Peru – Best for trekking 🏔️</p></div>
-      <div class="calendar-card"><h4>June</h4><p>Albania – Hidden gem beaches 🌊</p></div>
-      <div class="calendar-card"><h4>July</h4><p>Georgia (Caucasus) – Mountain air 🏞️</p></div>
-      <div class="calendar-card"><h4>August</h4><p>Indonesia – Surf & sun 🏄</p></div>
-      <div class="calendar-card"><h4>September</h4><p>Italy – Less crowded 🍷</p></div>
-      <div class="calendar-card"><h4>October</h4><p>Chile – Springtime Patagonia ❄️</p></div>
-      <div class="calendar-card"><h4>November</h4><p>Vietnam – Northern trekking 👣</p></div>
-      <div class="calendar-card"><h4>December</h4><p>Argentina – Warm holidays 🇦🇷</p></div>
-    </div>
-  </section>
-
-  <section class="section" id="globe">
-    <h2>🌍 Interactive Sabbatical Globe</h2>
-    <p>Explore the world. Spin the globe. Click a region to learn when to go and what to expect.</p>
-    <iframe src="https://earth.nullschool.net/" loading="lazy"></iframe>
-  </section>
-
-  <section class="section" id="carbon">
-    <h2>🌱 Carbon Offset Calculator</h2>
-    <p>Want to travel consciously? Estimate the CO₂ impact of your sabbatical and learn how to offset it.</p>
-    <form id="carbonForm">
-      <label>Roundtrip Flights (miles): <input type="number" id="miles" value="0" /></label><br/><br/>
-      <button type="submit" class="cta-button">Calculate CO₂</button>
-    </form>
-    <p id="carbonResult"></p>
-  </section>
-
-  <section class="section" id="quiz">
-    <h2>🧭 What's Your Sabbatical Style?</h2>
-    <p>Take this fun quiz to discover your ideal sabbatical rhythm—slow travel, learning immersion, outdoor odyssey?</p>
-    <a href="#" class="cta-button">Take the Quiz</a>
-  </section>
-
-  <section class="section" id="contact">
-    <h2>📬 Contact</h2>
-    <p>Have a question or story to share? <a href="mailto:hello@thesabbaticalist.com">Email me</a></p>
-  </section>
-
-  <footer class="footer">
-    <p>© 2025 The Sabbaticalist</p>
-  </footer>
-
-  <script>
-    // Emoji scroll
-    function createEmoji() {
-      const emoji = document.createElement('div');
-      emoji.classList.add('emoji');
-      emoji.textContent = '🧘';
-      emoji.style.left = Math.random() * 100 + 'vw';
-      document.body.appendChild(emoji);
-      setTimeout(() => emoji.remove(), 4000);
-    }
-    setInterval(createEmoji, 500);
-
-    // Section fade-in
-    const sections = document.querySelectorAll('.section');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.2 });
-    sections.forEach(section => observer.observe(section));
-
-    // Budget calculator
-    document.getElementById('calcForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const flights = parseFloat(document.getElementById('flights').value) || 0;
-      const accom = parseFloat(document.getElementById('accom').value) || 0;
-      const food = parseFloat(document.getElementById('food').value) || 0;
-      const total = flights + accom + food;
-      document.getElementById('totalDisplay').textContent = `Estimated Total: $${total.toFixed(2)}`;
-    });
-
-    // Carbon offset calculator
-    document.getElementById('carbonForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const miles = parseFloat(document.getElementById('miles').value) || 0;
-      const tons = (miles * 0.0002).toFixed(2);
-      document.getElementById('carbonResult').textContent = `Estimated CO₂: ${tons} metric tons. Consider offsetting through a verified project.`;
-    });
-  </script>
 </body>
 </html>
