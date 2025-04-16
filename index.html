@@ -152,7 +152,24 @@
       margin-bottom: 0.5rem;
     }
   </style>
-</head>
+</head> 
+  .typewriter {
+  font-size: 3.5rem;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 0.15em solid #333;
+  width: 0;
+  animation: typing 2.5s steps(20, end) forwards, blink 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 15ch; }
+}
+
+@keyframes blink {
+  50% { border-color: transparent; }
+}
 <body>
   <nav>
     <a href="#toolkit">Toolkit</a>
@@ -167,8 +184,7 @@
 
   <div class="hero">
     <div class="overlay">
-      <h1>Rediscover your time. Reclaim your life.</h1>
-      <p>Take Time Off, On Purpose</p>
+     <h1 class="typewriter">The Sabbaticalist</h1>
       <a href="https://thesabbaticalist.substack.com" class="cta-button">Join the Newsletter</a>
       <div style="margin-top: 2rem;">
         <img src="https://upload.wikimedia.org/wikipedia/commons/9/9c/Bus_font_awesome.svg" alt="Bus Icon" style="width: 40px; margin-right: 20px;">
