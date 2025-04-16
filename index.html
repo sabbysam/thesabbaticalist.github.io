@@ -18,7 +18,6 @@
 
     .hero {
       height: 100vh;
-      background: url('https://source.unsplash.com/1600x900/?sunrise,mountains') center/cover no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -53,11 +52,6 @@
       margin-bottom: 1rem;
     }
 
-    h2 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-
     .cta-button {
       display: inline-block;
       margin-top: 1.5rem;
@@ -83,23 +77,6 @@
       color: white;
     }
 
-    .icons {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-
-    .icons img {
-      width: 50px;
-      height: 50px;
-      transition: transform 0.3s ease;
-    }
-
-    .icons img:hover {
-      transform: scale(1.1);
-    }
-
     .sad-hero {
       text-align: center;
       margin: 4rem auto;
@@ -110,84 +87,74 @@
       max-width: 90%;
       border-radius: 12px;
       margin-bottom: 1rem;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
     }
 
-    label {
-      display: block;
-      margin-bottom: 1rem;
-      font-weight: 600;
-    }
-
-    input[type="number"] {
-      padding: 0.5rem;
-      border-radius: 5px;
-      border: none;
+    iframe {
       width: 100%;
-      max-width: 300px;
-    }
-
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
+      height: 500px;
+      border: none;
+      border-radius: 12px;
     }
   </style>
 </head>
 <body>
-  <!-- Hero section -->
-  <div class="hero">
+  <div class="hero" style="background-image: url('https://images.unsplash.com/photo-1495954222046-2c427ecb546d?fit=crop&w=1600&q=80'); background-size: cover;">
     <div class="overlay">
       <h1>The Sabbaticalist</h1>
       <p>Take Time Off, On Purpose</p>
       <a href="https://thesabbaticalist.substack.com" class="cta-button">Join the Newsletter</a>
-      <div class="icons">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Bus_font_awesome.svg" alt="Bus Icon">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/8/8e/Airplane_font_awesome.svg" alt="Airplane Icon">
+      <div style="margin-top: 2rem;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9c/Bus_font_awesome.svg" alt="Bus Icon" style="width: 40px; margin-right: 20px;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Airplane_font_awesome.svg" alt="Airplane Icon" style="width: 40px;">
       </div>
     </div>
   </div>
 
-  <!-- Sad guy image -->
   <div class="sad-hero">
-    <img src="https://raw.githubusercontent.com/sabbysam/thesabbaticalist.github.io/main/ChatGPT%20Image%20Mar%2026%2C%202025%2C%2007_08_55%20PM.png" alt="Sad Guy">
-    <p>This guy clearly needs a sabbatical...</p>
+    <img src="ChatGPT%20Image%20Mar%2026%2C%202025%2C%2007_08_55%20PM.png" alt="Sad Guy">
+    <p>Burnt out? Maybe it’s time for a reset.</p>
   </div>
 
-  <!-- Toolkit Section -->
   <section class="section" id="toolkit">
     <h2>🛠️ Free Toolkit</h2>
     <p>Grab our free sabbatical planning checklist and budget template.</p>
     <a class="cta-button" href="https://drive.google.com">Get the Toolkit</a>
   </section>
 
-  <!-- Calculator Section -->
   <section class="section" id="calculator">
     <h2>💸 Sabbatical Budget Calculator</h2>
     <p>Estimate your sabbatical expenses quickly:</p>
     <form id="calcForm">
-      <label>Flights: <input type="number" id="flights" value="0" /></label>
-      <label>Accommodation: <input type="number" id="accom" value="0" /></label>
-      <label>Food: <input type="number" id="food" value="0" /></label>
+      <label>Flights: <input type="number" id="flights" value="0" /></label><br/><br/>
+      <label>Accommodation: <input type="number" id="accom" value="0" /></label><br/><br/>
+      <label>Food: <input type="number" id="food" value="0" /></label><br/><br/>
       <button type="submit" class="cta-button">Calculate Total</button>
     </form>
-    <p id="totalDisplay" style="margin-top: 1rem; font-size: 1.2rem;"></p>
+    <p id="totalDisplay"></p>
   </section>
 
-  <!-- Contact Section -->
+  <section class="section" id="map">
+    <h2>🗺️ Where to Go</h2>
+    <p>Use our interactive map to see time zones and current weather for each region.</p>
+    <iframe src="https://www.timeanddate.com/worldclock/" loading="lazy"></iframe>
+  </section>
+
+  <section class="section" id="sabbatical-table">
+    <h2>📊 Explore a Real Sabbatical Plan</h2>
+    <p>This is our detailed sabbatical itinerary embedded directly on the site:</p>
+    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSbBjwKcvX2VFFKZML7B8vIDjjquMQ7_6klnTWt5zszfw6cbTg2mgFKWT3rZk4s7lfs8XQgS6FeLfOl/pubhtml?widget=true&amp;headers=false" height="600"></iframe>
+  </section>
+
   <section class="section" id="contact">
     <h2>📬 Contact</h2>
     <p>Have a question or story to share? <a href="mailto:hello@thesabbaticalist.com">Email me</a></p>
   </section>
 
-  <!-- Footer -->
   <footer class="footer">
     <p>© 2025 The Sabbaticalist</p>
   </footer>
 
-  <!-- JavaScript -->
   <script>
-    // Budget calculator
     document.getElementById('calcForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const flights = parseFloat(document.getElementById('flights').value) || 0;
@@ -197,7 +164,6 @@
       document.getElementById('totalDisplay').textContent = `Estimated Total: $${total.toFixed(2)}`;
     });
 
-    // Scroll-triggered animation
     const sections = document.querySelectorAll('.section');
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
