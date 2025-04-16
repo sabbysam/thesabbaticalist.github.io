@@ -11,7 +11,7 @@
       padding: 0;
       font-family: 'Manrope', sans-serif;
       scroll-behavior: smooth;
-      background: linear-gradient(to bottom, #1a1a2e, #16213e);
+      background: linear-gradient(to bottom, #e07a5f, #3d405b);
       color: #fff;
       overflow-x: hidden;
     }
@@ -27,7 +27,7 @@
     }
 
     .overlay {
-      background-color: rgba(0,0,0,0.6);
+      background-color: rgba(0,0,0,0.5);
       padding: 3rem;
       border-radius: 12px;
       animation: fadeIn 2s ease forwards;
@@ -50,6 +50,11 @@
 
     h1 {
       font-size: 3.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: 2rem;
       margin-bottom: 1rem;
     }
 
@@ -78,6 +83,50 @@
       color: white;
     }
 
+    .icons {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .icons img {
+      width: 50px;
+      height: 50px;
+      transition: transform 0.3s ease;
+    }
+
+    .icons img:hover {
+      transform: scale(1.1);
+    }
+
+    .sad-hero {
+      text-align: center;
+      margin: 4rem auto;
+    }
+
+    .sad-hero img {
+      width: 300px;
+      max-width: 90%;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    input[type="number"] {
+      padding: 0.5rem;
+      border-radius: 5px;
+      border: none;
+      width: 100%;
+      max-width: 300px;
+    }
+
     @keyframes fadeIn {
       to {
         opacity: 1;
@@ -86,43 +135,59 @@
   </style>
 </head>
 <body>
+  <!-- Hero section -->
   <div class="hero">
     <div class="overlay">
       <h1>The Sabbaticalist</h1>
       <p>Take Time Off, On Purpose</p>
       <a href="https://thesabbaticalist.substack.com" class="cta-button">Join the Newsletter</a>
+      <div class="icons">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Bus_font_awesome.svg" alt="Bus Icon">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/8e/Airplane_font_awesome.svg" alt="Airplane Icon">
+      </div>
     </div>
   </div>
 
+  <!-- Sad guy image -->
+  <div class="sad-hero">
+    <img src="https://raw.githubusercontent.com/sabbysam/thesabbaticalist.github.io/main/ChatGPT%20Image%20Mar%2026%2C%202025%2C%2007_08_55%20PM.png" alt="Sad Guy">
+    <p>This guy clearly needs a sabbatical...</p>
+  </div>
+
+  <!-- Toolkit Section -->
   <section class="section" id="toolkit">
     <h2>🛠️ Free Toolkit</h2>
     <p>Grab our free sabbatical planning checklist and budget template.</p>
     <a class="cta-button" href="https://drive.google.com">Get the Toolkit</a>
   </section>
 
+  <!-- Calculator Section -->
   <section class="section" id="calculator">
     <h2>💸 Sabbatical Budget Calculator</h2>
     <p>Estimate your sabbatical expenses quickly:</p>
     <form id="calcForm">
-      <label>Flights: <input type="number" id="flights" value="0" /></label><br/><br/>
-      <label>Accommodation: <input type="number" id="accom" value="0" /></label><br/><br/>
-      <label>Food: <input type="number" id="food" value="0" /></label><br/><br/>
+      <label>Flights: <input type="number" id="flights" value="0" /></label>
+      <label>Accommodation: <input type="number" id="accom" value="0" /></label>
+      <label>Food: <input type="number" id="food" value="0" /></label>
       <button type="submit" class="cta-button">Calculate Total</button>
     </form>
-    <p id="totalDisplay"></p>
+    <p id="totalDisplay" style="margin-top: 1rem; font-size: 1.2rem;"></p>
   </section>
 
+  <!-- Contact Section -->
   <section class="section" id="contact">
     <h2>📬 Contact</h2>
     <p>Have a question or story to share? <a href="mailto:hello@thesabbaticalist.com">Email me</a></p>
   </section>
 
+  <!-- Footer -->
   <footer class="footer">
     <p>© 2025 The Sabbaticalist</p>
   </footer>
 
+  <!-- JavaScript -->
   <script>
-    // Calculator
+    // Budget calculator
     document.getElementById('calcForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const flights = parseFloat(document.getElementById('flights').value) || 0;
@@ -132,21 +197,17 @@
       document.getElementById('totalDisplay').textContent = `Estimated Total: $${total.toFixed(2)}`;
     });
 
-    // Scroll Animation
+    // Scroll-triggered animation
     const sections = document.querySelectorAll('.section');
-    const options = { threshold: 0.2 };
-    const observer = new IntersectionObserver((entries) => {
+    const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
         }
       });
-    }, options);
+    }, { threshold: 0.2 });
 
-    sections.forEach(section => {
-      observer.observe(section);
-    });
+    sections.forEach(section => observer.observe(section));
   </script>
 </body>
 </html>
-
