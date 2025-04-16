@@ -5,7 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Sabbaticalist</title>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
-  <style>
+  <style>  .typewriter {
+  font-size: 3.5rem;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 0.15em solid #333;
+  width: 0;
+  animation: typing 2.5s steps(20, end) forwards, blink 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 15ch; }
+}
+
+@keyframes blink {
+  50% { border-color: transparent; }
+}
     html, body {
       margin: 0;
       padding: 0;
@@ -153,23 +169,6 @@
     }
   </style>
 </head> 
-  .typewriter {
-  font-size: 3.5rem;
-  overflow: hidden;
-  white-space: nowrap;
-  border-right: 0.15em solid #333;
-  width: 0;
-  animation: typing 2.5s steps(20, end) forwards, blink 0.75s step-end infinite;
-}
-
-@keyframes typing {
-  from { width: 0; }
-  to { width: 15ch; }
-}
-
-@keyframes blink {
-  50% { border-color: transparent; }
-}
 <body>
   <nav>
     <a href="#toolkit">Toolkit</a>
