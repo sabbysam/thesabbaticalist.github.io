@@ -39,39 +39,34 @@
     .cta-button {
       margin-top: 1rem;
       padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      background: white;
+      background-color: white;
       color: #111;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 6px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     }
 
-    section {
-      padding: 4rem 2rem;
+    .section {
+      padding: 5rem 2rem;
       max-width: 800px;
       margin: auto;
     }
 
-    .tool {
-      background: #fff;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      margin-bottom: 2rem;
-      transition: transform 0.3s ease;
+    .section h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
     }
 
-    .tool:hover {
-      transform: translateY(-5px);
+    .section p, .section a {
+      font-size: 1.1rem;
     }
 
-    footer {
-      background: #111;
-      color: white;
+    .footer {
       text-align: center;
       padding: 2rem;
+      background: #111;
+      color: white;
     }
   </style>
 </head>
@@ -84,20 +79,24 @@
     </div>
   </div>
 
-  <section>
-    <div class="tool">
-      <h2>🛠️ Free Toolkit</h2>
-      <p>Grab our free sabbatical planning checklist and budget template.</p>
-      <a class="cta-button" href="https://drive.google.com">Get the Toolkit</a>
-    </div>
-
-    <div class="tool">
-      <h2>📧 Contact</h2>
-      <p>Have a question or story to share? <a href="mailto:hello@thesabbaticalist.com">Email us</a></p>
-    </div>
+  <section class="section" id="toolkit">
+    <h2>🛠️ Free Toolkit</h2>
+    <p>Grab our free sabbatical planning checklist and budget template.</p>
+    <a class="cta-button" href="https://drive.google.com">Get the Toolkit</a>
   </section>
 
-  <footer>
+  <section class="section" id="sandbox">
+    <h2>🎯 Try the Sabbatical Calculator</h2>
+    <p>Estimate your sabbatical budget in under 60 seconds.</p>
+    <a class="cta-button" href="#">Launch the Calculator (Coming Soon)</a>
+  </section>
+
+  <section class="section" id="contact">
+    <h2>📬 Contact</h2>
+    <p>Have a question or story to share? <a href="mailto:hello@thesabbaticalist.com">Email me</a></p>
+  </section>
+
+  <footer class="footer">
     <p>© 2025 The Sabbaticalist</p>
   </footer>
 </body>
