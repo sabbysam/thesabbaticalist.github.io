@@ -5,23 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Sabbaticalist</title>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
-  <style>  .typewriter {
-  font-size: 3.5rem;
-  overflow: hidden;
-  white-space: nowrap;
-  border-right: 0.15em solid #333;
-  width: 0;
-  animation: typing 2.5s steps(20, end) forwards, blink 0.75s step-end infinite;
-}
-
-@keyframes typing {
-  from { width: 0; }
-  to { width: 15ch; }
-}
-
-@keyframes blink {
-  50% { border-color: transparent; }
-}
+  <style>
     html, body {
       margin: 0;
       padding: 0;
@@ -31,7 +15,6 @@
       color: #333;
       overflow-x: hidden;
     }
-
     nav {
       position: fixed;
       top: 0;
@@ -44,13 +27,11 @@
       z-index: 1000;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
-
     nav a {
       text-decoration: none;
       color: #333;
       font-weight: 600;
     }
-
     .hero {
       height: 100vh;
       display: flex;
@@ -60,7 +41,6 @@
       position: relative;
       padding-top: 3rem;
     }
-
     .overlay {
       background-color: rgba(255,255,255,0.85);
       padding: 3rem;
@@ -68,7 +48,24 @@
       animation: fadeIn 2s ease forwards;
       opacity: 0;
     }
-
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    .typewriter {
+      font-size: 3.5rem;
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 0.15em solid #333;
+      width: 0;
+      animation: typing 2.5s steps(20, end) forwards, blink 0.75s step-end infinite;
+    }
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 15ch; }
+    }
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
     .section {
       padding: 5rem 2rem;
       max-width: 800px;
@@ -77,17 +74,10 @@
       transform: translateY(50px);
       transition: opacity 1s ease, transform 1s ease;
     }
-
     .section.visible {
       opacity: 1;
       transform: translateY(0);
     }
-
-    h1 {
-      font-size: 3.5rem;
-      margin-bottom: 1rem;
-    }
-
     .cta-button {
       display: inline-block;
       margin-top: 1.5rem;
@@ -99,38 +89,32 @@
       border-radius: 6px;
       transition: all 0.3s ease;
     }
-
     .cta-button:hover {
       background-color: #4caf50;
       transform: scale(1.05);
     }
-
     .footer {
       text-align: center;
       padding: 2rem;
       background: #111;
       color: white;
     }
-
     .sad-hero {
       text-align: center;
       margin: 4rem auto;
     }
-
     .sad-hero img {
       width: 300px;
       max-width: 90%;
       border-radius: 12px;
       margin-bottom: 1rem;
     }
-
     iframe {
       width: 100%;
       height: 500px;
       border: none;
       border-radius: 12px;
     }
-
     .emoji {
       position: fixed;
       font-size: 2rem;
@@ -138,44 +122,39 @@
       pointer-events: none;
       animation: floatDown 4s linear infinite;
     }
-
     @keyframes floatDown {
       0% { transform: translateY(-50px); opacity: 1; }
       100% { transform: translateY(100vh); opacity: 0; }
     }
-
     .calendar-section {
       background: #fff3e0;
       padding: 4rem 2rem;
       text-align: center;
     }
-
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 1.5rem;
       margin-top: 2rem;
     }
-
     .calendar-card {
       background: #fff;
       padding: 1rem;
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-
     .calendar-card h4 {
       margin-bottom: 0.5rem;
     }
   </style>
-</head> 
+</head>
 <body>
   <nav>
     <a href="#toolkit">Toolkit</a>
     <a href="#calculator">Calculator</a>
     <a href="#sabbatical-table">Plan</a>
     <a href="#calendar">Seasons</a>
-    <a href="#globe">Globe</a>
+    <a href="#gear">Gear</a>
     <a href="#carbon">Offset</a>
     <a href="#quiz">Quiz</a>
     <a href="#contact">Contact</a>
@@ -183,17 +162,18 @@
 
   <div class="hero">
     <div class="overlay">
-     <h1 class="typewriter">The Sabbaticalist</h1>
+      <h1 class="typewriter">The Sabbaticalist</h1>
+      <p>Take Time Off, On Purpose</p>
       <a href="https://thesabbaticalist.substack.com" class="cta-button">Join the Newsletter</a>
       <div style="margin-top: 2rem;">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9c/Bus_font_awesome.svg" alt="Bus Icon" style="width: 40px; margin-right: 20px;">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Airplane_font_awesome.svg" alt="Airplane Icon" style="width: 40px;">
+        <span style="font-size: 2rem; margin-right: 20px;">🚌</span>
+        <span style="font-size: 2rem;">✈️</span>
       </div>
     </div>
   </div>
 
   <div class="sad-hero">
-    <img src="ChatGPT%20Image%20Mar%2026%2C%202025%2C%2007_08_55%20PM.png" alt="Sad Guy">
+    <img src="https://raw.githubusercontent.com/sabbysam/thesabbaticalist.github.io/main/ChatGPT%20Image%20Mar%2026%2C%202025%2C%2007_08_55%20PM.png" alt="Sad Guy">
     <p>Burnt out? Maybe it’s time for a reset.</p>
   </div>
 
@@ -239,10 +219,28 @@
     </div>
   </section>
 
-  <section class="section" id="globe">
-    <h2>🌍 Interactive Sabbatical Globe</h2>
-    <p>Explore the world. Spin the globe. Click a region to learn when to go and what to expect.</p>
-    <iframe src="https://earth.nullschool.net/" loading="lazy"></iframe>
+  <section class="section" id="gear">
+    <h2>🎒 Recommended Gear for Your Sabbatical</h2>
+    <p>Planning your journey? Here are essentials many long-term travelers swear by — all Amazon affiliate-friendly:</p>
+    <ul style="list-style-type: none; padding: 0;">
+      <li style="margin-bottom: 1.5rem;">
+        <strong>🧳 Nomatic Travel Pack</strong><br/>
+        <a href="https://www.amazon.com/dp/B07RZVYMZ3" target="_blank" class="cta-button">View on Amazon</a>
+      </li>
+      <li style="margin-bottom: 1.5rem;">
+        <strong>🔌 Universal Travel Adapter</strong><br/>
+        <a href="https://www.amazon.com/dp/B082P7ZQCY" target="_blank" class="cta-button">View on Amazon</a>
+      </li>
+      <li style="margin-bottom: 1.5rem;">
+        <strong>🎧 Noise Cancelling Headphones</strong><br/>
+        <a href="https://www.amazon.com/dp/B09JYVY5FY" target="_blank" class="cta-button">View on Amazon</a>
+      </li>
+      <li style="margin-bottom: 1.5rem;">
+        <strong>📚 Kindle Paperwhite</strong><br/>
+        <a href="https://www.amazon.com/dp/B08KTZ8249" target="_blank" class="cta-button">View on Amazon</a>
+      </li>
+    </ul>
+    <p style="font-size: 0.9rem; color: #666;">These are placeholder links. Once you're approved for Amazon's affiliate program, update them with your custom URLs to earn from referrals!</p>
   </section>
 
   <section class="section" id="carbon">
@@ -271,7 +269,6 @@
   </footer>
 
   <script>
-    // Emoji scroll
     function createEmoji() {
       const emoji = document.createElement('div');
       emoji.classList.add('emoji');
@@ -282,7 +279,6 @@
     }
     setInterval(createEmoji, 500);
 
-    // Section fade-in
     const sections = document.querySelectorAll('.section');
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
@@ -293,7 +289,6 @@
     }, { threshold: 0.2 });
     sections.forEach(section => observer.observe(section));
 
-    // Budget calculator
     document.getElementById('calcForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const flights = parseFloat(document.getElementById('flights').value) || 0;
@@ -303,7 +298,6 @@
       document.getElementById('totalDisplay').textContent = `Estimated Total: $${total.toFixed(2)}`;
     });
 
-    // Carbon offset calculator
     document.getElementById('carbonForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const miles = parseFloat(document.getElementById('miles').value) || 0;
