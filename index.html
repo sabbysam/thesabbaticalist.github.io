@@ -394,6 +394,31 @@
           </form>
           <p id="carbon-result" class="subtle" aria-live="polite"></p>
         </article>
+        <article class="card">
+          <h3>Cost &amp; Runway calculator</h3>
+          <form id="runway-form">
+            <label>Starting savings <input type="number" id="runway-savings" min="0" step="100" inputmode="decimal" value="20000" required /></label>
+            <label>Monthly income (optional) <input type="number" id="runway-income" min="0" step="50" inputmode="decimal" value="0" /></label>
+            <label>Travel style
+              <select id="runway-style">
+                <option value="budget">Budget</option>
+                <option value="comfortable" selected>Comfortable</option>
+                <option value="nice">Nice</option>
+              </select>
+            </label>
+            <label>Region
+              <select id="runway-region">
+                <option value="global">Global mix</option>
+                <option value="sea">Southeast Asia</option>
+                <option value="latam">Latin America</option>
+                <option value="europe">Europe</option>
+              </select>
+            </label>
+            <label>Extra monthly home costs <input type="number" id="runway-home" min="0" step="50" inputmode="decimal" value="300" /></label>
+            <button type="submit" class="primary-btn">Estimate runway</button>
+          </form>
+          <p id="runway-result" class="subtle" aria-live="polite"></p>
+        </article>
       </div>
     </section>
 
@@ -483,6 +508,48 @@
       const miles = parseFloat(document.getElementById('carbon-miles').value) || 0;
       const tons = (miles * 0.0002).toFixed(2);
       carbonResult.textContent = `Estimated CO₂: ${tons} metric tons. Consider offsetting through a verified project.`;
+    });
+
+    const runwayForm = document.getElementById('runway-form');
+    const runwayResult = document.getElementById('runway-result');
+    const baseByRegion = {
+      global: 2200,
+      sea: 1500,
+      latam: 1700,
+      europe: 2600,
+    };
+    const styleMultiplier = {
+      budget: 0.85,
+      comfortable: 1,
+      nice: 1.2,
+    };
+
+    runwayForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const savingsInput = parseFloat(document.getElementById('runway-savings').value);
+      if (Number.isNaN(savingsInput) || savingsInput <= 0) {
+        runwayResult.textContent = 'Enter your starting savings (more than $0).';
+        return;
+      }
+
+      const incomeInput = parseFloat(document.getElementById('runway-income').value);
+      const monthlyIncome = Number.isNaN(incomeInput) ? 0 : Math.max(incomeInput, 0);
+      const style = document.getElementById('runway-style').value;
+      const region = document.getElementById('runway-region').value;
+      const homeInput = parseFloat(document.getElementById('runway-home').value);
+      const homeCosts = Number.isNaN(homeInput) ? 0 : Math.max(homeInput, 0);
+
+      const baseMonthly = (baseByRegion[region] || baseByRegion.global) * (styleMultiplier[style] || 1);
+      const monthlyBurn = baseMonthly + homeCosts - monthlyIncome;
+
+      if (monthlyBurn <= 0) {
+        runwayResult.textContent = 'Estimated monthly net burn: $0. Your income covers projected costs—your savings last indefinitely at this pace.';
+        return;
+      }
+
+      const runwayMonths = savingsInput / monthlyBurn;
+      runwayResult.textContent = `Estimated monthly net burn: $${monthlyBurn.toFixed(0)}. Runway: ${runwayMonths.toFixed(1)} months based on your inputs.`;
     });
   </script>
 </body>
