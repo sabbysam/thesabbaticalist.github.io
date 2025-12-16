@@ -1,357 +1,489 @@
-+<!DOCTYPE html>
-+<html lang="en">
-+<head>
-+  <meta charset="UTF-8" />
-+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-+  <title>The Sabbaticalist</title>
-+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
-+  <style>
-+    html, body {
-+      margin: 0;
-+      padding: 0;
-+      font-family: 'Manrope', sans-serif;
-+      scroll-behavior: smooth;
-+      background: linear-gradient(to bottom, #fddbb0, #f7a17a, #b477a2);
-+      color: #333;
-+      overflow-x: hidden;
-+    }
-+    .skip-link {
-+      position: absolute;
-+      top: -40px;
-+      left: 1rem;
-+      padding: 0.75rem 1rem;
-+      background: #111;
-+      color: #fff;
-+      text-decoration: none;
-+      border-radius: 6px;
-+      transition: top 0.2s ease;
-+      z-index: 1100;
-+    }
-+    .skip-link:focus {
-+      top: 1rem;
-+    }
-+    nav {
-+      position: fixed;
-+      top: 0;
-+      width: 100%;
-+      background: rgba(255, 255, 255, 0.95);
-+      padding: 1rem;
-+      display: flex;
-+      justify-content: center;
-+      gap: 2rem;
-+      z-index: 1000;
-+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-+    }
-+    nav a {
-+      text-decoration: none;
-+      color: #333;
-+      font-weight: 600;
-+    }
-+    .hero {
-+      height: 100vh;
-+      display: flex;
-+      align-items: center;
-+      justify-content: center;
-+      text-align: center;
-+      position: relative;
-+      padding-top: 3rem;
-+    }
-+    .overlay {
-+      background-color: rgba(255,255,255,0.85);
-+      padding: 3rem;
-+      border-radius: 12px;
-+      animation: fadeIn 2s ease forwards;
-+      opacity: 0;
-+    }
-+    @keyframes fadeIn {
-+      to { opacity: 1; }
-+    }
-+    .typewriter {
-+      font-size: 3.5rem;
-+      overflow: hidden;
-+      white-space: nowrap;
-+      border-right: 0.15em solid #333;
-+      width: 0;
-+      animation: typing 2.5s steps(20, end) forwards, blink 0.75s step-end infinite;
-+    }
-+    @keyframes typing {
-+      from { width: 0; }
-+      to { width: 15ch; }
-+    }
-+    @keyframes blink {
-+      50% { border-color: transparent; }
-+    }
-+    .section {
-+      padding: 5rem 2rem;
-+      max-width: 800px;
-+      margin: auto;
-+      opacity: 0;
-+      transform: translateY(50px);
-+      transition: opacity 1s ease, transform 1s ease;
-+    }
-+    .section.visible {
-+      opacity: 1;
-+      transform: translateY(0);
-+    }
-+    .cta-button {
-+      display: inline-block;
-+      margin-top: 1.5rem;
-+      padding: 0.75rem 2rem;
-+      background-color: #111;
-+      color: #fff;
-+      font-weight: bold;
-+      text-decoration: none;
-+      border-radius: 6px;
-+      transition: all 0.3s ease;
-+    }
-+    .cta-button:hover {
-+      background-color: #4caf50;
-+      transform: scale(1.05);
-+    }
-+    .footer {
-+      text-align: center;
-+      padding: 2rem;
-+      background: #111;
-+      color: white;
-+    }
-+    .sad-hero {
-+      text-align: center;
-+      margin: 4rem auto;
-+    }
-+    .sad-hero img {
-+      width: 300px;
-+      max-width: 90%;
-+      border-radius: 12px;
-+      margin-bottom: 1rem;
-+    }
-+    iframe {
-+      width: 100%;
-+      height: 500px;
-+      border: none;
-+      border-radius: 12px;
-+    }
-+    .emoji {
-+      position: fixed;
-+      font-size: 2rem;
-+      z-index: 9999;
-+      pointer-events: none;
-+      animation: floatDown 4s linear infinite;
-+    }
-+    @keyframes floatDown {
-+      0% { transform: translateY(-50px); opacity: 1; }
-+      100% { transform: translateY(100vh); opacity: 0; }
-+    }
-+    .calendar-section {
-+      background: #fff3e0;
-+      padding: 4rem 2rem;
-+      text-align: center;
-+    }
-+    .calendar-grid {
-+      display: grid;
-+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-+      gap: 1.5rem;
-+      margin-top: 2rem;
-+    }
-+    .calendar-card {
-+      background: #fff;
-+      padding: 1rem;
-+      border-radius: 10px;
-+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-+    }
-+    .calendar-card h4 {
-+      margin-bottom: 0.5rem;
-+    }
-+
-+    @media (prefers-reduced-motion: reduce) {
-+      html, body {
-+        scroll-behavior: auto;
-+      }
-+
-+      .overlay,
-+      .typewriter,
-+      .emoji,
-+      .section {
-+        animation: none !important;
-+        transition: none !important;
-+      }
-+
-+      .typewriter {
-+        width: auto;
-+        border-right: none;
-+      }
-+    }
-+  </style>
-+</head>
-+<body>
-+  <a class="skip-link" href="#main-content">Skip to main content</a>
-+  <nav aria-label="Main navigation">
-+    <a href="#toolkit">Toolkit</a>
-+    <a href="#calculator">Calculator</a>
-+    <a href="#sabbatical-table">Plan</a>
-+    <a href="#calendar">Seasons</a>
-+    <a href="#gear">Gear</a>
-+    <a href="#carbon">Offset</a>
-+    <a href="#quiz">Quiz</a>
-+    <a href="#contact">Contact</a>
-+  </nav>
-+
-+  <div class="hero" id="main-content">
-+    <div class="overlay">
-+      <h1 class="typewriter">The Sabbaticalist</h1>
-+      <p>Take Time Off, On Purpose</p>
-+      <a href="https://thesabbaticalist.substack.com" class="cta-button" target="_blank" rel="noopener noreferrer">Join the Newsletter</a>
-+      <div style="margin-top: 2rem;">
-+        <span style="font-size: 2rem; margin-right: 20px;">🚌</span>
-+        <span style="font-size: 2rem;">✈️</span>
-+      </div>
-+    </div>
-+  </div>
-+
-+  <div class="sad-hero">
-+    <img src="https://raw.githubusercontent.com/sabbysam/thesabbaticalist.github.io/main/ChatGPT%20Image%20Mar%2026%2C%202025%2C%2007_08_55%20PM.png" alt="Sad Guy" loading="lazy">
-+    <p>Burnt out? Maybe it’s time for a reset.</p>
-+  </div>
-+
-+  <section class="section" id="toolkit">
-+    <h2>🛠️ Free Toolkit</h2>
-+    <p>Grab our free sabbatical planning checklist and budget template.</p>
-+    <a class="cta-button" href="https://drive.google.com">Get the Toolkit</a>
-+  </section>
-+
-+  <section class="section" id="calculator">
-+    <h2>💸 Sabbatical Budget Calculator</h2>
-+    <p>Estimate your sabbatical expenses quickly:</p>
-+    <form id="calcForm">
-+      <label>Flights: <input type="number" id="flights" value="0" min="0" step="0.01" inputmode="decimal" /></label><br/><br/>
-+      <label>Accommodation: <input type="number" id="accom" value="0" min="0" step="0.01" inputmode="decimal" /></label><br/><br/>
-+      <label>Food: <input type="number" id="food" value="0" min="0" step="0.01" inputmode="decimal" /></label><br/><br/>
-+      <button type="submit" class="cta-button">Calculate Total</button>
-+    </form>
-+    <p id="totalDisplay" aria-live="polite"></p>
-+  </section>
-+
-+  <section class="section" id="sabbatical-table">
-+    <h2>📊 Explore a Real Sabbatical Plan</h2>
-+    <p>Download our sabbatical plan template here:</p>
-+    <a href="Final_365-Day_Sabbatical__Max_30_Days_Rule___Flight_Costs_.csv" class="cta-button" download>Download Template (CSV)</a>
-+  </section>
-+
-+  <section class="calendar-section" id="calendar">
-+    <h2>📅 Where to Go, Month by Month</h2>
-+    <div class="calendar-grid">
-+      <div class="calendar-card"><h4>January</h4><p>New Zealand – Summer hiking 🌿</p></div>
-+      <div class="calendar-card"><h4>February</h4><p>Thailand – Dry season 🏝️</p></div>
-+      <div class="calendar-card"><h4>March</h4><p>Japan – Cherry blossoms 🌸</p></div>
-+      <div class="calendar-card"><h4>April</h4><p>Portugal – Shoulder season ☀️</p></div>
-+      <div class="calendar-card"><h4>May</h4><p>Peru – Best for trekking 🏔️</p></div>
-+      <div class="calendar-card"><h4>June</h4><p>Albania – Hidden gem beaches 🌊</p></div>
-+      <div class="calendar-card"><h4>July</h4><p>Georgia (Caucasus) – Mountain air 🏞️</p></div>
-+      <div class="calendar-card"><h4>August</h4><p>Indonesia – Surf & sun 🏄</p></div>
-+      <div class="calendar-card"><h4>September</h4><p>Italy – Less crowded 🍷</p></div>
-+      <div class="calendar-card"><h4>October</h4><p>Chile – Springtime Patagonia ❄️</p></div>
-+      <div class="calendar-card"><h4>November</h4><p>Vietnam – Northern trekking 👣</p></div>
-+      <div class="calendar-card"><h4>December</h4><p>Argentina – Warm holidays 🇦🇷</p></div>
-+    </div>
-+  </section>
-+
-+  <section class="section" id="gear">
-+    <h2>🎒 Recommended Gear for Your Sabbatical</h2>
-+    <p>Planning your journey? Here are essentials many long-term travelers swear by — all Amazon affiliate-friendly:</p>
-+    <ul style="list-style-type: none; padding: 0;">
-+      <li style="margin-bottom: 1.5rem;">
-+        <strong>🧳 Nomatic Travel Pack</strong><br/>
-+        <a href="https://www.amazon.com/dp/B07RZVYMZ3" target="_blank" rel="noopener noreferrer" class="cta-button">View on Amazon</a>
-+      </li>
-+      <li style="margin-bottom: 1.5rem;">
-+        <strong>🔌 Universal Travel Adapter</strong><br/>
-+        <a href="https://www.amazon.com/dp/B082P7ZQCY" target="_blank" rel="noopener noreferrer" class="cta-button">View on Amazon</a>
-+      </li>
-+      <li style="margin-bottom: 1.5rem;">
-+        <strong>🎧 Noise Cancelling Headphones</strong><br/>
-+        <a href="https://www.amazon.com/dp/B09JYVY5FY" target="_blank" rel="noopener noreferrer" class="cta-button">View on Amazon</a>
-+      </li>
-+      <li style="margin-bottom: 1.5rem;">
-+        <strong>📚 Kindle Paperwhite</strong><br/>
-+        <a href="https://www.amazon.com/dp/B08KTZ8249" target="_blank" rel="noopener noreferrer" class="cta-button">View on Amazon</a>
-+      </li>
-+    </ul>
-+    <p style="font-size: 0.9rem; color: #666;">These are placeholder links. Once you're approved for Amazon's affiliate program, update them with your custom URLs to earn from referrals!</p>
-+  </section>
-+
-+  <section class="section" id="carbon">
-+    <h2>🌱 Carbon Offset Calculator</h2>
-+    <p>Want to travel consciously? Estimate the CO₂ impact of your sabbatical and learn how to offset it.</p>
-+    <form id="carbonForm">
-+      <label>Roundtrip Flights (miles): <input type="number" id="miles" value="0" min="0" step="1" inputmode="numeric" /></label><br/><br/>
-+      <button type="submit" class="cta-button">Calculate CO₂</button>
-+    </form>
-+    <p id="carbonResult" aria-live="polite"></p>
-+  </section>
-+
-+  <section class="section" id="quiz">
-+    <h2>🧭 What's Your Sabbatical Style?</h2>
-+    <p>Take this fun quiz to discover your ideal sabbatical rhythm—slow travel, learning immersion, outdoor odyssey?</p>
-+    <a href="#" class="cta-button">Take the Quiz</a>
-+  </section>
-+
-+  <section class="section" id="contact">
-+    <h2>📬 Contact</h2>
-+    <p>Have a question or story to share? <a href="mailto:hello@thesabbaticalist.com">Email me</a></p>
-+  </section>
-+
-+  <footer class="footer">
-+    <p>© 2025 The Sabbaticalist</p>
-+  </footer>
-+
-+  <script>
-+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-+
-+    function createEmoji() {
-+      const emoji = document.createElement('div');
-+      emoji.classList.add('emoji');
-+      emoji.textContent = '🧘';
-+      emoji.style.left = Math.random() * 100 + 'vw';
-+      document.body.appendChild(emoji);
-+      setTimeout(() => emoji.remove(), 4000);
-+    }
-+
-+    if (!motionQuery.matches) {
-+      setInterval(createEmoji, 500);
-+    }
-+
-+    const sections = document.querySelectorAll('.section');
-+    const observer = new IntersectionObserver(entries => {
-+      entries.forEach(entry => {
-+        if (entry.isIntersecting) {
-+          entry.target.classList.add('visible');
-+        }
-+      });
-+    }, { threshold: 0.2 });
-+
-+    if (!motionQuery.matches) {
-+      sections.forEach(section => observer.observe(section));
-+    } else {
-+      sections.forEach(section => section.classList.add('visible'));
-+    }
-+
-+    document.getElementById('calcForm').addEventListener('submit', function(e) {
-+      e.preventDefault();
-+      const flights = parseFloat(document.getElementById('flights').value) || 0;
-+      const accom = parseFloat(document.getElementById('accom').value) || 0;
-+      const food = parseFloat(document.getElementById('food').value) || 0;
-+      const total = flights + accom + food;
-+      document.getElementById('totalDisplay').textContent = `Estimated Total: $${total.toFixed(2)}`;
-+    });
-+
-+    document.getElementById('carbonForm').addEventListener('submit', function(e) {
-+      e.preventDefault();
-+      const miles = parseFloat(document.getElementById('miles').value) || 0;
-+      const tons = (miles * 0.0002).toFixed(2);
-+      document.getElementById('carbonResult').textContent = `Estimated CO₂: ${tons} metric tons. Consider offsetting through a verified project.`;
-+    });
-+  </script>
-+</body>
-+</html>
- 
-EOF
-)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Sabbaticalist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d1b2a;
+      --accent: #ffb703;
+      --accent-dark: #fb8500;
+      --card: #10243f;
+      --text: #e8f1ff;
+      --muted: #9fb3c8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at 20% 20%, rgba(255, 183, 3, 0.2), transparent 35%),
+                  radial-gradient(circle at 80% 10%, rgba(132, 94, 194, 0.25), transparent 30%),
+                  linear-gradient(135deg, #0b1324 0%, #0c1a2f 50%, #0a1e38 100%);
+      color: var(--text);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(14px);
+      background: rgba(10, 18, 31, 0.7);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+      font-size: 1rem;
+    }
+
+    .logo span {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: #0d1b2a;
+      font-weight: 900;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-links a {
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      text-decoration: none;
+      color: var(--muted);
+      font-weight: 600;
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      outline: none;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -999px;
+      top: auto;
+      padding: 0.8rem 1rem;
+      background: #fff;
+      color: #0d1b2a;
+      font-weight: 700;
+      border-radius: 10px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+      transition: left 0.2s ease;
+      z-index: 1001;
+    }
+
+    .skip-link:focus {
+      left: 1rem;
+      top: 1rem;
+    }
+
+    .hero {
+      max-width: 1100px;
+      margin: 3rem auto 2rem;
+      padding: 2rem 1.5rem 3.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .hero-content h1 {
+      font-size: clamp(2.5rem, 4vw, 3.5rem);
+      line-height: 1.1;
+      margin: 0 0 1rem;
+      letter-spacing: -1px;
+    }
+
+    .hero-content p {
+      margin: 0 0 1.5rem;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.55rem 0.9rem;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      color: var(--text);
+      font-weight: 700;
+      letter-spacing: -0.1px;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+    }
+
+    .primary-btn,
+    .ghost-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.15rem;
+      border-radius: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .primary-btn {
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: #0d1b2a;
+      box-shadow: 0 10px 40px rgba(251, 133, 0, 0.35);
+    }
+
+    .ghost-btn {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .primary-btn:hover,
+    .ghost-btn:hover,
+    .primary-btn:focus-visible,
+    .ghost-btn:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.35);
+      outline: none;
+    }
+
+    .hero-visual {
+      background: linear-gradient(160deg, rgba(255, 183, 3, 0.15), rgba(132, 94, 194, 0.15));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 1.5rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    }
+
+    .hero-visual img {
+      width: 100%;
+      border-radius: 14px;
+      display: block;
+      box-shadow: 0 10px 45px rgba(0, 0, 0, 0.35);
+    }
+
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3.5rem 1.5rem;
+    }
+
+    .section h2 {
+      margin: 0 0 1rem;
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      letter-spacing: -0.5px;
+    }
+
+    .section p {
+      margin: 0 0 1.5rem;
+      color: var(--muted);
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 20%, rgba(255, 183, 3, 0.08), transparent 40%);
+      pointer-events: none;
+    }
+
+    .card h3 {
+      margin: 0 0 0.5rem;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      margin-top: 0.75rem;
+    }
+
+    .tools form {
+      display: grid;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .tools label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: -0.1px;
+    }
+
+    .tools input {
+      padding: 0.85rem 0.9rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .tools input:focus-visible {
+      outline: 2px solid var(--accent);
+      border-color: transparent;
+    }
+
+    .subtle {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1.5rem 3rem;
+      color: var(--muted);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 720px) {
+      nav {
+        gap: 1rem;
+      }
+      .nav-links {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <header>
+    <nav aria-label="Primary">
+      <div class="logo"><span>TS</span> The Sabbaticalist</div>
+      <div class="nav-links">
+        <a href="#toolkit">Toolkit</a>
+        <a href="#calculators">Calculators</a>
+        <a href="#calendar">Seasons</a>
+        <a href="#gear">Gear</a>
+        <a href="#plan">Plan</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="hero-content">
+        <div class="badge">Take time off, on purpose</div>
+        <h1>Sabbaticals for people who refuse to burn out.</h1>
+        <p>Design a career break with clarity, numbers that add up, and places that light you up. No fluff—just tools, templates, and coaching to make your year off actually happen.</p>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+          <a class="primary-btn" href="https://thesabbaticalist.substack.com" target="_blank" rel="noopener">Join the newsletter</a>
+          <a class="ghost-btn" href="#toolkit">Browse the toolkit</a>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1000&q=80" alt="Mountain overlook" loading="lazy" />
+      </div>
+    </section>
+
+    <section class="section" id="toolkit">
+      <h2>🛠️ The Sabbatical Toolkit</h2>
+      <p>Everything I wish I had before my first break: checklists, budgeting frameworks, and ready-to-use planning templates.</p>
+      <div class="cards">
+        <article class="card">
+          <h3>Planning Checklist</h3>
+          <p class="subtle">Visa research, notice periods, health, housing, insurance, and the exact sequencing to keep you sane.</p>
+          <a class="primary-btn" href="https://drive.google.com" target="_blank" rel="noopener">Download checklist</a>
+        </article>
+        <article class="card">
+          <h3>Budget Template</h3>
+          <p class="subtle">Built for year-long travel with real numbers and contingency buffers.</p>
+          <a class="ghost-btn" href="#calculators">Estimate costs</a>
+        </article>
+        <article class="card">
+          <h3>Community</h3>
+          <p class="subtle">Monthly live Q&A sessions with people planning their own breaks.</p>
+          <a class="ghost-btn" href="mailto:hello@thesabbaticalist.com">Say hi</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section tools" id="calculators">
+      <h2>💸 Quick calculators</h2>
+      <p>Get a fast read on what your sabbatical might cost and how to travel lighter on the planet.</p>
+      <div class="cards">
+        <article class="card">
+          <h3>Sabbatical budget</h3>
+          <form id="budget-form">
+            <label>Flights <input type="number" id="budget-flights" min="0" step="0.01" inputmode="decimal" placeholder="1200" /></label>
+            <label>Accommodation <input type="number" id="budget-accom" min="0" step="0.01" inputmode="decimal" placeholder="8000" /></label>
+            <label>Food & daily spend <input type="number" id="budget-food" min="0" step="0.01" inputmode="decimal" placeholder="5000" /></label>
+            <button type="submit" class="primary-btn">Calculate</button>
+          </form>
+          <p id="budget-result" class="subtle" aria-live="polite"></p>
+        </article>
+        <article class="card">
+          <h3>Carbon estimate</h3>
+          <form id="carbon-form">
+            <label>Roundtrip miles <input type="number" id="carbon-miles" min="0" step="1" inputmode="numeric" placeholder="9000" /></label>
+            <button type="submit" class="primary-btn">Estimate CO₂</button>
+          </form>
+          <p id="carbon-result" class="subtle" aria-live="polite"></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="plan">
+      <h2>📊 Explore a real sabbatical plan</h2>
+      <p>Steal the template I use with coaching clients—dates, flights, costs, and a pace that avoids burnout.</p>
+      <a class="primary-btn" href="Final_365-Day_Sabbatical__Max_30_Days_Rule___Flight_Costs_.csv" download>Download the CSV</a>
+    </section>
+
+    <section class="section" id="calendar">
+      <h2>📅 Where to go, month by month</h2>
+      <p>Built for weather, crowds, and vibe. Swap months as your preferences demand.</p>
+      <div class="calendar-grid">
+        <div class="card"><h3>January</h3><p class="subtle">New Zealand — alpine summer trails.</p></div>
+        <div class="card"><h3>February</h3><p class="subtle">Thailand — dry season islands.</p></div>
+        <div class="card"><h3>March</h3><p class="subtle">Japan — slow hanami in Kyoto.</p></div>
+        <div class="card"><h3>April</h3><p class="subtle">Portugal — shoulder season sun.</p></div>
+        <div class="card"><h3>May</h3><p class="subtle">Peru — trekking without the crowds.</p></div>
+        <div class="card"><h3>June</h3><p class="subtle">Albania — Adriatic beaches minus the price tag.</p></div>
+        <div class="card"><h3>July</h3><p class="subtle">Georgia — mountain air and wine country.</p></div>
+        <div class="card"><h3>August</h3><p class="subtle">Indonesia — surf & slow villages.</p></div>
+        <div class="card"><h3>September</h3><p class="subtle">Italy — Apennine hikes + empty museums.</p></div>
+        <div class="card"><h3>October</h3><p class="subtle">Chile — Patagonian spring.</p></div>
+        <div class="card"><h3>November</h3><p class="subtle">Vietnam — cool northern treks.</p></div>
+        <div class="card"><h3>December</h3><p class="subtle">Argentina — warm city nights.</p></div>
+      </div>
+    </section>
+
+    <section class="section" id="gear">
+      <h2>🎒 Travel gear I actually use</h2>
+      <p>Curated essentials built for long-term travel. Swap in your own affiliate links when you’re ready.</p>
+      <div class="cards">
+        <article class="card">
+          <h3>Nomatic Travel Pack</h3>
+          <p class="subtle">One-bag setup with compression cubes.</p>
+          <a class="primary-btn" href="https://www.amazon.com/dp/B07RZVYMZ3" target="_blank" rel="noopener">View on Amazon</a>
+        </article>
+        <article class="card">
+          <h3>Universal adapter</h3>
+          <p class="subtle">Two USB-C ports plus surge protection.</p>
+          <a class="primary-btn" href="https://www.amazon.com/dp/B082P7ZQCY" target="_blank" rel="noopener">View on Amazon</a>
+        </article>
+        <article class="card">
+          <h3>Noise cancelling headphones</h3>
+          <p class="subtle">To survive overnight buses and open offices.</p>
+          <a class="primary-btn" href="https://www.amazon.com/dp/B09JYVY5FY" target="_blank" rel="noopener">View on Amazon</a>
+        </article>
+        <article class="card">
+          <h3>Kindle Paperwhite</h3>
+          <p class="subtle">4,000 books, zero extra kilos.</p>
+          <a class="primary-btn" href="https://www.amazon.com/dp/B08KTZ8249" target="_blank" rel="noopener">View on Amazon</a>
+        </article>
+      </div>
+      <p class="subtle" style="margin-top:1rem;">These are placeholder links—replace them with your own once your affiliate program is approved.</p>
+    </section>
+
+    <section class="section" id="contact">
+      <h2>🧭 Want a sanity check?</h2>
+      <p>Send me your rough plan. I’ll tell you if it’s realistic, where to slow down, and how to keep your savings intact.</p>
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;">
+        <a class="primary-btn" href="mailto:hello@thesabbaticalist.com">Email hello@thesabbaticalist.com</a>
+        <span class="pill">24h response for subscribers</span>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 The Sabbaticalist. Built for people who care about work and rest.</p>
+  </footer>
+
+  <script>
+    const budgetForm = document.getElementById('budget-form');
+    const budgetResult = document.getElementById('budget-result');
+    budgetForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const flights = parseFloat(document.getElementById('budget-flights').value) || 0;
+      const accom = parseFloat(document.getElementById('budget-accom').value) || 0;
+      const food = parseFloat(document.getElementById('budget-food').value) || 0;
+      const total = flights + accom + food;
+      budgetResult.textContent = `Estimated total: $${total.toFixed(2)}`;
+    });
+
+    const carbonForm = document.getElementById('carbon-form');
+    const carbonResult = document.getElementById('carbon-result');
+    carbonForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const miles = parseFloat(document.getElementById('carbon-miles').value) || 0;
+      const tons = (miles * 0.0002).toFixed(2);
+      carbonResult.textContent = `Estimated CO₂: ${tons} metric tons. Consider offsetting through a verified project.`;
+    });
+  </script>
+</body>
+</html>
