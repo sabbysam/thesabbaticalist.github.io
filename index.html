@@ -204,6 +204,89 @@
       box-shadow: 0 10px 45px rgba(0, 0, 0, 0.35);
     }
 
+    .hero-caption {
+      margin-top: 0.8rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .toggle-row {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin: 0.6rem 0 1rem;
+    }
+
+    .pill-toggle {
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      padding: 0.55rem 0.95rem;
+      border-radius: 999px;
+      font-weight: 700;
+      letter-spacing: -0.1px;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+    }
+
+    .pill-toggle[aria-pressed="true"] {
+      background: rgba(255, 183, 3, 0.16);
+      border-color: rgba(255, 183, 3, 0.35);
+      color: #ffe6b3;
+      transform: translateY(-1px);
+    }
+
+    .runway-preview {
+      margin-top: 1.25rem;
+      padding: 1rem 1.1rem 1.2rem;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+    }
+
+    .runway-preview label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 0.7rem;
+    }
+
+    .runway-controls {
+      display: grid;
+      gap: 0.65rem;
+      align-items: center;
+      grid-template-columns: 1fr 100px;
+    }
+
+    .runway-controls input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+
+    .runway-controls input[type="number"] {
+      width: 100%;
+      padding: 0.65rem 0.75rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .runway-result {
+      margin: 0.45rem 0 0.65rem;
+      color: var(--muted);
+    }
+
+    .runway-preview a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: var(--text);
+    }
+
     .section {
       max-width: 1100px;
       margin: 0 auto;
@@ -339,14 +422,29 @@
       <div class="hero-content">
         <div class="badge">Take time off, on purpose</div>
         <h1>Sabbaticals for people who refuse to burn out.</h1>
-        <p>Design a career break with clarity, numbers that add up, and places that light you up. No fluff—just tools, templates, and coaching to make your year off actually happen.</p>
+        <p id="hero-subheadline">Design a career break with clarity, numbers that add up, and places that light you up. No fluff—just tools, templates, and coaching to make your year off actually happen.</p>
+        <div class="toggle-row" aria-label="Values toggles">
+          <button class="pill-toggle" type="button" data-mode="adventure" aria-pressed="false">Adventure</button>
+          <button class="pill-toggle" type="button" data-mode="comfort" aria-pressed="true">Comfort</button>
+          <button class="pill-toggle" type="button" data-mode="clarity" aria-pressed="false">Clarity</button>
+        </div>
         <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
           <a class="primary-btn" href="https://thesabbaticalist.substack.com" target="_blank" rel="noopener">Join the newsletter</a>
           <a class="ghost-btn" href="#toolkit">Browse the toolkit</a>
         </div>
+        <div class="runway-preview" aria-live="polite">
+          <label for="preview-savings">If you had $<span id="preview-inline-savings">50,000</span> saved…</label>
+          <div class="runway-controls">
+            <input type="range" id="preview-savings" min="5000" max="100000" step="500" value="50000" />
+            <input type="number" id="preview-savings-number" min="0" step="500" value="50000" inputmode="decimal" aria-label="Edit savings amount" />
+          </div>
+          <p class="runway-result">That’s <strong id="preview-months">~11</strong> months of travel at a $4,500/mo pace.</p>
+          <a href="#calculators">See full calculator →</a>
+        </div>
       </div>
       <div class="hero-visual" aria-hidden="true">
         <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1000&q=80" alt="Mountain overlook" loading="lazy" />
+        <div class="hero-caption" id="hero-caption">Places that restore you.</div>
       </div>
     </section>
 
@@ -490,6 +588,71 @@
   </footer>
 
   <script>
+    const tonePresets = {
+      adventure: {
+        sub: 'Places that stretch you. Swap routine for range: treks, new skills, and friends you haven’t met yet.',
+        caption: 'Routes that challenge you and gift you better stories.',
+      },
+      comfort: {
+        sub: 'Places that restore you. Soft landings, slower mornings, and meals that feel like home.',
+        caption: 'Rooms with warm light, easy trails, and time that drips instead of sprints.',
+      },
+      clarity: {
+        sub: 'Plans you can trust. Visas sorted, budgets clear, and a pace that lets you think again.',
+        caption: 'Itineraries with breathing room and decisions you’ve already made.',
+      },
+    };
+
+    const toggleButtons = document.querySelectorAll('.pill-toggle');
+    const heroSubheadline = document.getElementById('hero-subheadline');
+    const heroCaption = document.getElementById('hero-caption');
+
+    const setTone = (mode) => {
+      const tone = tonePresets[mode] || tonePresets.comfort;
+      heroSubheadline.textContent = tone.sub;
+      heroCaption.textContent = tone.caption;
+      toggleButtons.forEach((btn) => {
+        const isActive = btn.dataset.mode === mode;
+        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      });
+    };
+
+    toggleButtons.forEach((btn) =>
+      btn.addEventListener('click', () => {
+        setTone(btn.dataset.mode);
+      })
+    );
+
+    const savingsSlider = document.getElementById('preview-savings');
+    const savingsNumber = document.getElementById('preview-savings-number');
+    const inlineSavings = document.getElementById('preview-inline-savings');
+    const previewMonths = document.getElementById('preview-months');
+    const monthlyPace = 4500;
+
+    const formatCurrency = (value) => Number(value).toLocaleString('en-US', { maximumFractionDigits: 0 });
+
+    const updateRunwayPreview = (value) => {
+      const cleanValue = Math.max(0, Number(value) || 0);
+      const maxValue = Number(savingsSlider?.max) || cleanValue;
+      const boundedValue = Math.min(cleanValue, maxValue);
+      const months = boundedValue / monthlyPace;
+      inlineSavings.textContent = formatCurrency(boundedValue);
+      previewMonths.textContent = `~${months.toFixed(1)}`;
+      savingsSlider.value = boundedValue;
+      savingsNumber.value = boundedValue;
+    };
+
+    savingsSlider?.addEventListener('input', (event) => {
+      updateRunwayPreview(event.target.value);
+    });
+
+    savingsNumber?.addEventListener('input', (event) => {
+      updateRunwayPreview(event.target.value);
+    });
+
+    setTone('comfort');
+    updateRunwayPreview(savingsSlider?.value || 50000);
+
     const budgetForm = document.getElementById('budget-form');
     const budgetResult = document.getElementById('budget-result');
     budgetForm?.addEventListener('submit', (event) => {
