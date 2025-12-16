@@ -373,6 +373,15 @@
       font-size: 1rem;
     }
 
+    .tools select {
+      padding: 0.85rem 0.9rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      font-size: 1rem;
+    }
+
     .tools input:focus-visible {
       outline: 2px solid var(--accent);
       border-color: transparent;
@@ -381,6 +390,50 @@
     .subtle {
       color: var(--muted);
       font-size: 0.95rem;
+    }
+
+    .itinerary-output {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .itinerary-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .itinerary-results {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .itinerary-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 0.85rem 1rem;
+    }
+
+    .itinerary-item h4 {
+      margin: 0 0 0.35rem;
+      letter-spacing: -0.1px;
+    }
+
+    .itinerary-meta {
+      color: var(--muted);
+      margin: 0 0 0.3rem;
+      font-weight: 600;
+    }
+
+    .itinerary-anchors {
+      margin: 0.15rem 0 0;
+      color: var(--text);
+      font-weight: 600;
     }
 
     footer {
@@ -516,6 +569,55 @@
             <button type="submit" class="primary-btn">Estimate runway</button>
           </form>
           <p id="runway-result" class="subtle" aria-live="polite"></p>
+        </article>
+        <article class="card">
+          <h3>Itinerary generator</h3>
+          <form id="itinerary-form">
+            <label>Trip length (months)
+              <select id="itinerary-length">
+                <option value="3">3</option>
+                <option value="6" selected>6</option>
+                <option value="9">9</option>
+                <option value="12">12</option>
+              </select>
+            </label>
+            <label>Pace
+              <select id="itinerary-pace">
+                <option value="slow">Slow</option>
+                <option value="balanced" selected>Balanced</option>
+                <option value="fast">Fast</option>
+              </select>
+            </label>
+            <label>Climate preference
+              <select id="itinerary-climate">
+                <option value="warm">Warm</option>
+                <option value="mixed" selected>Mixed</option>
+                <option value="cool">Cool</option>
+              </select>
+            </label>
+            <label>Primary interest
+              <select id="itinerary-vibe">
+                <option value="nature">Nature</option>
+                <option value="cities">Cities</option>
+                <option value="mixed" selected>Mixed</option>
+              </select>
+            </label>
+            <label>Budget
+              <select id="itinerary-budget">
+                <option value="budget">Budget</option>
+                <option value="comfortable" selected>Comfortable</option>
+                <option value="nice">Nice</option>
+              </select>
+            </label>
+            <button type="submit" class="primary-btn">Generate itinerary</button>
+          </form>
+          <div class="itinerary-output">
+            <div class="itinerary-header">
+              <p id="itinerary-summary" class="subtle" aria-live="polite">Set your inputs and generate a starter route.</p>
+              <button type="button" id="copy-itinerary" class="ghost-btn" disabled>Copy itinerary</button>
+            </div>
+            <div id="itinerary-results" class="itinerary-results" aria-live="polite"></div>
+          </div>
         </article>
       </div>
     </section>
@@ -713,6 +815,343 @@
 
       const runwayMonths = savingsInput / monthlyBurn;
       runwayResult.textContent = `Estimated monthly net burn: $${monthlyBurn.toFixed(0)}. Runway: ${runwayMonths.toFixed(1)} months based on your inputs.`;
+    });
+
+    const itineraryForm = document.getElementById('itinerary-form');
+    const itineraryResults = document.getElementById('itinerary-results');
+    const itinerarySummary = document.getElementById('itinerary-summary');
+    const copyItineraryButton = document.getElementById('copy-itinerary');
+
+    const itineraryDestinations = [
+      {
+        name: 'Northern Thailand',
+        region: 'Southeast Asia',
+        location: 'Thailand (north)',
+        climate: 'warm',
+        vibe: 'mixed',
+        budget: 'budget',
+        bestMonths: [11, 12, 1, 2, 3],
+        anchors: ['Chiang Mai', 'Pai', 'Chiang Rai'],
+        reason: 'Dry season mountains, cafes to work from, and easy visas at low cost.',
+      },
+      {
+        name: 'Vietnam Coast',
+        region: 'Southeast Asia',
+        location: 'Vietnam',
+        climate: 'warm',
+        vibe: 'mixed',
+        budget: 'budget',
+        bestMonths: [1, 2, 3, 11, 12],
+        anchors: ['Da Nang', 'Hoi An', 'Hue'],
+        reason: 'Beach-to-city mix with train links, great food, and shoulder-season prices.',
+      },
+      {
+        name: 'Mexico City & Oaxaca',
+        region: 'Latin America',
+        location: 'Mexico',
+        climate: 'mixed',
+        vibe: 'cities',
+        budget: 'comfortable',
+        bestMonths: [1, 2, 3, 4, 11, 12],
+        anchors: ['Mexico City', 'Oaxaca', 'Puebla'],
+        reason: 'Culture-forward cities with mild weather and nonstop flights from the U.S.',
+      },
+      {
+        name: 'Patagonia & Lakes',
+        region: 'South America',
+        location: 'Chile & Argentina',
+        climate: 'cool',
+        vibe: 'nature',
+        budget: 'nice',
+        bestMonths: [11, 12, 1, 2, 3],
+        anchors: ['Puerto Natales', 'Bariloche', 'El Chaltén'],
+        reason: 'Peak hiking weather with long daylight and bucket-list trails.',
+      },
+      {
+        name: 'Portugal Coast',
+        region: 'Europe',
+        location: 'Portugal',
+        climate: 'mixed',
+        vibe: 'cities',
+        budget: 'comfortable',
+        bestMonths: [4, 5, 6, 9, 10],
+        anchors: ['Lisbon', 'Porto', 'Lagos'],
+        reason: 'Shoulder-season sun, easy trains, and walkable neighborhoods.',
+      },
+      {
+        name: 'Balkans Loop',
+        region: 'Europe',
+        location: 'Croatia & Slovenia',
+        climate: 'mixed',
+        vibe: 'mixed',
+        budget: 'comfortable',
+        bestMonths: [5, 6, 7, 8, 9],
+        anchors: ['Split', 'Dubrovnik', 'Ljubljana'],
+        reason: 'Adriatic swims plus alpine escapes, all within easy bus and ferry hops.',
+      },
+      {
+        name: 'Japan Honshu',
+        region: 'Asia',
+        location: 'Japan',
+        climate: 'mixed',
+        vibe: 'cities',
+        budget: 'nice',
+        bestMonths: [3, 4, 5, 10, 11],
+        anchors: ['Tokyo', 'Kyoto', 'Osaka'],
+        reason: 'Reliable trains, food pilgrimages, and mild seasons for long city days.',
+      },
+      {
+        name: 'Peruvian Andes',
+        region: 'South America',
+        location: 'Peru',
+        climate: 'cool',
+        vibe: 'nature',
+        budget: 'budget',
+        bestMonths: [5, 6, 7, 8, 9],
+        anchors: ['Cusco', 'Sacred Valley', 'Arequipa'],
+        reason: 'Dry season treks, high-altitude towns, and solid value for longer stays.',
+      },
+      {
+        name: 'South Africa Cape',
+        region: 'Africa',
+        location: 'South Africa',
+        climate: 'mixed',
+        vibe: 'mixed',
+        budget: 'comfortable',
+        bestMonths: [11, 12, 1, 2, 3],
+        anchors: ['Cape Town', 'Stellenbosch', 'Hermanus'],
+        reason: 'Summer in the southern hemisphere with coastlines, wine country, and hikes.',
+      },
+      {
+        name: 'Bali & Islands',
+        region: 'Southeast Asia',
+        location: 'Indonesia',
+        climate: 'warm',
+        vibe: 'nature',
+        budget: 'comfortable',
+        bestMonths: [5, 6, 7, 8, 9],
+        anchors: ['Ubud', 'Canggu', 'Uluwatu'],
+        reason: 'Dry season surf, wellness hubs, and easy month-long villa rentals.',
+      },
+      {
+        name: 'Spain + Morocco',
+        region: 'Europe & Africa',
+        location: 'Spain & Morocco',
+        climate: 'mixed',
+        vibe: 'mixed',
+        budget: 'comfortable',
+        bestMonths: [3, 4, 5, 10, 11],
+        anchors: ['Seville', 'Valencia', 'Marrakesh'],
+        reason: 'Rail-linked cities with quick hops to North Africa for contrast.',
+      },
+      {
+        name: 'Australian East Coast',
+        region: 'Oceania',
+        location: 'Australia',
+        climate: 'warm',
+        vibe: 'mixed',
+        budget: 'nice',
+        bestMonths: [12, 1, 2, 3],
+        anchors: ['Sydney', 'Byron Bay', 'Melbourne'],
+        reason: 'Southern summer beaches plus big-city culture and easy domestic flights.',
+      },
+      {
+        name: 'Canadian Rockies',
+        region: 'North America',
+        location: 'Canada',
+        climate: 'cool',
+        vibe: 'nature',
+        budget: 'nice',
+        bestMonths: [6, 7, 8, 9],
+        anchors: ['Banff', 'Canmore', 'Vancouver'],
+        reason: 'Long-trail hiking, alpine lakes, and crisp weather for outdoor time.',
+      },
+      {
+        name: 'Scandinavia Summer',
+        region: 'Europe',
+        location: 'Norway & Sweden',
+        climate: 'cool',
+        vibe: 'nature',
+        budget: 'nice',
+        bestMonths: [6, 7, 8],
+        anchors: ['Oslo', 'Bergen', 'Stockholm'],
+        reason: 'Midnight sun, fjord ferries, and immaculate hiking infrastructure.',
+      },
+    ];
+
+    const budgetRank = ['budget', 'comfortable', 'nice'];
+
+    const scoreDestination = (destination, preferences, targetMonth, usedNames) => {
+      let score = 0;
+
+      if (destination.climate === preferences.climate) {
+        score += 5;
+      } else if (destination.climate === 'mixed' || preferences.climate === 'mixed') {
+        score += 3;
+      } else {
+        score += 1;
+      }
+
+      if (destination.vibe === preferences.vibe) {
+        score += 5;
+      } else if (destination.vibe === 'mixed' || preferences.vibe === 'mixed') {
+        score += 3;
+      } else {
+        score += 1;
+      }
+
+      const destBudgetIndex = budgetRank.indexOf(destination.budget);
+      const prefBudgetIndex = budgetRank.indexOf(preferences.budget);
+      const budgetGap = Math.abs(destBudgetIndex - prefBudgetIndex);
+      score += Math.max(0, 4 - budgetGap * 2);
+
+      const monthDistance = destination.bestMonths.reduce((closest, month) => {
+        const forwardDiff = Math.abs(month - targetMonth);
+        const wrappedDiff = Math.min(forwardDiff, 12 - forwardDiff);
+        return Math.min(closest, wrappedDiff);
+      }, 12);
+
+      if (destination.bestMonths.includes(targetMonth)) {
+        score += 5;
+      } else if (monthDistance <= 1) {
+        score += 3;
+      } else if (monthDistance <= 2) {
+        score += 1;
+      }
+
+      if (usedNames.has(destination.name)) {
+        score -= 3;
+      }
+
+      return score;
+    };
+
+    const selectDestination = (targetMonth, preferences, usedNames) => {
+      const ranked = itineraryDestinations
+        .map((destination) => ({
+          destination,
+          score: scoreDestination(destination, preferences, targetMonth, usedNames),
+        }))
+        .sort((a, b) => {
+          if (b.score === a.score) {
+            return a.destination.name.localeCompare(b.destination.name);
+          }
+          return b.score - a.score;
+        });
+
+      const topChoice = ranked[0]?.destination;
+      return topChoice || itineraryDestinations[0];
+    };
+
+    const calculateStops = (length, pace) => {
+      const months = Math.max(1, length);
+      const stopMap = {
+        slow: Math.max(1, Math.round(months / 3)),
+        balanced: Math.max(1, Math.round(months / 2)),
+        fast: Math.max(1, months),
+      };
+
+      const desiredStops = stopMap[pace] ?? stopMap.balanced;
+      return Math.min(desiredStops, itineraryDestinations.length);
+    };
+
+    const buildItinerary = (length, pace, preferences) => {
+      const totalMonths = Math.min(Math.max(length, 1), 12);
+      const stops = calculateStops(totalMonths, pace);
+      const monthsPerStop = Math.ceil(totalMonths / stops);
+      const used = new Set();
+      const stopPlans = [];
+
+      for (let index = 0; index < stops; index += 1) {
+        const targetMonth = Math.min(totalMonths, index * monthsPerStop + 1);
+        const choice = selectDestination(targetMonth, preferences, used);
+        stopPlans.push(choice);
+        used.add(choice.name);
+      }
+
+      const itinerary = [];
+      for (let month = 1; month <= totalMonths; month += 1) {
+        const stopIndex = Math.min(Math.floor((month - 1) / monthsPerStop), stopPlans.length - 1);
+        const stop = stopPlans[stopIndex] || stopPlans[0];
+        itinerary.push({ month, stop });
+      }
+
+      return { itinerary, stops };
+    };
+
+    const renderItinerary = (items, summaryLine) => {
+      itinerarySummary.textContent = summaryLine;
+      if (!items.length) {
+        itineraryResults.innerHTML = '<p class="subtle">Set your inputs and generate a starter route.</p>';
+        copyItineraryButton.disabled = true;
+        return '';
+      }
+
+      const content = items
+        .map(
+          ({ month, stop }) => `
+            <div class="itinerary-item">
+              <h4>Month ${month}: ${stop.location}</h4>
+              <p class="itinerary-meta">${stop.region} — ${stop.name}</p>
+              <p class="subtle">Why this fits: ${stop.reason}</p>
+              <p class="itinerary-anchors">Anchor cities: ${stop.anchors.join(', ')}</p>
+            </div>
+          `
+        )
+        .join('');
+
+      itineraryResults.innerHTML = content;
+      copyItineraryButton.disabled = false;
+
+      const copyBlock = items
+        .map(({ month, stop }) => `Month ${month}: ${stop.location} — ${stop.region} / ${stop.name}. Why: ${stop.reason}. Anchors: ${stop.anchors.join(', ')}`)
+        .join('\n');
+
+      return `${summaryLine}\n${copyBlock}`;
+    };
+
+    let latestItineraryText = '';
+
+    itineraryForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const length = parseInt(document.getElementById('itinerary-length')?.value, 10);
+      const pace = document.getElementById('itinerary-pace')?.value || 'balanced';
+      const climate = document.getElementById('itinerary-climate')?.value || 'mixed';
+      const vibe = document.getElementById('itinerary-vibe')?.value || 'mixed';
+      const budget = document.getElementById('itinerary-budget')?.value || 'comfortable';
+
+      const validLengths = [3, 6, 9, 12];
+      const tripLength = validLengths.includes(length) ? length : 6;
+
+      const preferences = {
+        climate,
+        vibe,
+        budget,
+      };
+
+      const { itinerary, stops } = buildItinerary(tripLength, pace, preferences);
+      const flights = Math.max(0, stops - 1);
+      const summaryLine = `${stops} stops, ~${flights} flight hops. Use this as a planning starting point and adjust for visas + rhythm.`;
+
+      latestItineraryText = renderItinerary(itinerary, summaryLine);
+    });
+
+    copyItineraryButton?.addEventListener('click', async () => {
+      if (!latestItineraryText) return;
+
+      try {
+        await navigator.clipboard.writeText(latestItineraryText);
+        copyItineraryButton.textContent = 'Copied!';
+        setTimeout(() => {
+          copyItineraryButton.textContent = 'Copy itinerary';
+        }, 1500);
+      } catch (error) {
+        copyItineraryButton.textContent = 'Copy failed';
+        setTimeout(() => {
+          copyItineraryButton.textContent = 'Copy itinerary';
+        }, 1500);
+      }
     });
   </script>
 </body>
