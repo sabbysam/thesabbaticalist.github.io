@@ -382,6 +382,10 @@
       font-size: 1rem;
     }
 
+    .tools select[multiple] {
+      min-height: 130px;
+    }
+
     .tools input:focus-visible {
       outline: 2px solid var(--accent);
       border-color: transparent;
@@ -609,6 +613,29 @@
                 <option value="nice">Nice</option>
               </select>
             </label>
+            <label>Season start month
+              <select id="itinerary-start-month">
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6" selected>June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </label>
+            <label>Avoid (multi-select)
+              <select id="itinerary-avoid" multiple>
+                <option value="avoid-long-flights">Avoid long flights</option>
+                <option value="avoid-winter">Avoid winter</option>
+                <option value="avoid-expensive">Avoid expensive regions</option>
+              </select>
+            </label>
             <button type="submit" class="primary-btn">Generate itinerary</button>
           </form>
           <div class="itinerary-output">
@@ -821,6 +848,23 @@
     const itineraryResults = document.getElementById('itinerary-results');
     const itinerarySummary = document.getElementById('itinerary-summary');
     const copyItineraryButton = document.getElementById('copy-itinerary');
+    const itineraryAvoid = document.getElementById('itinerary-avoid');
+    const itineraryStartMonth = document.getElementById('itinerary-start-month');
+
+    const monthNames = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
 
     const itineraryDestinations = [
       {
@@ -830,6 +874,7 @@
         climate: 'warm',
         vibe: 'mixed',
         budget: 'budget',
+        flightLength: 'long',
         bestMonths: [11, 12, 1, 2, 3],
         anchors: ['Chiang Mai', 'Pai', 'Chiang Rai'],
         reason: 'Dry season mountains, cafes to work from, and easy visas at low cost.',
@@ -841,6 +886,7 @@
         climate: 'warm',
         vibe: 'mixed',
         budget: 'budget',
+        flightLength: 'long',
         bestMonths: [1, 2, 3, 11, 12],
         anchors: ['Da Nang', 'Hoi An', 'Hue'],
         reason: 'Beach-to-city mix with train links, great food, and shoulder-season prices.',
@@ -852,6 +898,7 @@
         climate: 'mixed',
         vibe: 'cities',
         budget: 'comfortable',
+        flightLength: 'medium',
         bestMonths: [1, 2, 3, 4, 11, 12],
         anchors: ['Mexico City', 'Oaxaca', 'Puebla'],
         reason: 'Culture-forward cities with mild weather and nonstop flights from the U.S.',
@@ -863,6 +910,7 @@
         climate: 'cool',
         vibe: 'nature',
         budget: 'nice',
+        flightLength: 'long',
         bestMonths: [11, 12, 1, 2, 3],
         anchors: ['Puerto Natales', 'Bariloche', 'El Chaltén'],
         reason: 'Peak hiking weather with long daylight and bucket-list trails.',
@@ -874,6 +922,7 @@
         climate: 'mixed',
         vibe: 'cities',
         budget: 'comfortable',
+        flightLength: 'medium',
         bestMonths: [4, 5, 6, 9, 10],
         anchors: ['Lisbon', 'Porto', 'Lagos'],
         reason: 'Shoulder-season sun, easy trains, and walkable neighborhoods.',
@@ -885,6 +934,7 @@
         climate: 'mixed',
         vibe: 'mixed',
         budget: 'comfortable',
+        flightLength: 'medium',
         bestMonths: [5, 6, 7, 8, 9],
         anchors: ['Split', 'Dubrovnik', 'Ljubljana'],
         reason: 'Adriatic swims plus alpine escapes, all within easy bus and ferry hops.',
@@ -896,6 +946,7 @@
         climate: 'mixed',
         vibe: 'cities',
         budget: 'nice',
+        flightLength: 'long',
         bestMonths: [3, 4, 5, 10, 11],
         anchors: ['Tokyo', 'Kyoto', 'Osaka'],
         reason: 'Reliable trains, food pilgrimages, and mild seasons for long city days.',
@@ -907,6 +958,7 @@
         climate: 'cool',
         vibe: 'nature',
         budget: 'budget',
+        flightLength: 'long',
         bestMonths: [5, 6, 7, 8, 9],
         anchors: ['Cusco', 'Sacred Valley', 'Arequipa'],
         reason: 'Dry season treks, high-altitude towns, and solid value for longer stays.',
@@ -918,6 +970,7 @@
         climate: 'mixed',
         vibe: 'mixed',
         budget: 'comfortable',
+        flightLength: 'long',
         bestMonths: [11, 12, 1, 2, 3],
         anchors: ['Cape Town', 'Stellenbosch', 'Hermanus'],
         reason: 'Summer in the southern hemisphere with coastlines, wine country, and hikes.',
@@ -929,6 +982,7 @@
         climate: 'warm',
         vibe: 'nature',
         budget: 'comfortable',
+        flightLength: 'long',
         bestMonths: [5, 6, 7, 8, 9],
         anchors: ['Ubud', 'Canggu', 'Uluwatu'],
         reason: 'Dry season surf, wellness hubs, and easy month-long villa rentals.',
@@ -940,6 +994,7 @@
         climate: 'mixed',
         vibe: 'mixed',
         budget: 'comfortable',
+        flightLength: 'medium',
         bestMonths: [3, 4, 5, 10, 11],
         anchors: ['Seville', 'Valencia', 'Marrakesh'],
         reason: 'Rail-linked cities with quick hops to North Africa for contrast.',
@@ -951,6 +1006,7 @@
         climate: 'warm',
         vibe: 'mixed',
         budget: 'nice',
+        flightLength: 'long',
         bestMonths: [12, 1, 2, 3],
         anchors: ['Sydney', 'Byron Bay', 'Melbourne'],
         reason: 'Southern summer beaches plus big-city culture and easy domestic flights.',
@@ -962,6 +1018,7 @@
         climate: 'cool',
         vibe: 'nature',
         budget: 'nice',
+        flightLength: 'medium',
         bestMonths: [6, 7, 8, 9],
         anchors: ['Banff', 'Canmore', 'Vancouver'],
         reason: 'Long-trail hiking, alpine lakes, and crisp weather for outdoor time.',
@@ -973,6 +1030,7 @@
         climate: 'cool',
         vibe: 'nature',
         budget: 'nice',
+        flightLength: 'long',
         bestMonths: [6, 7, 8],
         anchors: ['Oslo', 'Bergen', 'Stockholm'],
         reason: 'Midnight sun, fjord ferries, and immaculate hiking infrastructure.',
@@ -981,8 +1039,55 @@
 
     const budgetRank = ['budget', 'comfortable', 'nice'];
 
+    const defaultItineraryState = {
+      length: 6,
+      pace: 'balanced',
+      climate: 'mixed',
+      vibe: 'mixed',
+      budget: 'comfortable',
+      avoid: [],
+      startMonth: 6,
+    };
+
+    const normalizeMonth = (rawMonth) => {
+      const numeric = Number(rawMonth);
+      if (Number.isNaN(numeric)) return defaultItineraryState.startMonth;
+      const remainder = ((numeric - 1) % 12 + 12) % 12;
+      return remainder + 1;
+    };
+
+    const wrapMonth = (start, offset = 0) => normalizeMonth(start + offset);
+
+    const isWinterMonth = (month) => [12, 1, 2].includes(month);
+
     const scoreDestination = (destination, preferences, targetMonth, usedNames) => {
       let score = 0;
+
+      const avoidSet = new Set(preferences.avoid || []);
+
+      if (avoidSet.has('avoid-long-flights')) {
+        if (destination.flightLength === 'long') {
+          score -= 4;
+        } else if (destination.flightLength === 'medium') {
+          score -= 1;
+        }
+      }
+
+      if (avoidSet.has('avoid-expensive')) {
+        if (destination.budget === 'nice') {
+          score -= 4;
+        } else if (destination.budget === 'comfortable') {
+          score -= 1;
+        }
+      }
+
+      if (avoidSet.has('avoid-winter') && isWinterMonth(targetMonth)) {
+        if (destination.climate === 'cool') {
+          score -= 4;
+        } else {
+          score -= 1;
+        }
+      }
 
       if (destination.climate === preferences.climate) {
         score += 5;
@@ -1012,11 +1117,13 @@
       }, 12);
 
       if (destination.bestMonths.includes(targetMonth)) {
-        score += 5;
+        score += 6;
       } else if (monthDistance <= 1) {
         score += 3;
       } else if (monthDistance <= 2) {
         score += 1;
+      } else {
+        score -= 4;
       }
 
       if (usedNames.has(destination.name)) {
@@ -1063,7 +1170,7 @@
       const stopPlans = [];
 
       for (let index = 0; index < stops; index += 1) {
-        const targetMonth = Math.min(totalMonths, index * monthsPerStop + 1);
+        const targetMonth = wrapMonth(preferences.startMonth, index * monthsPerStop);
         const choice = selectDestination(targetMonth, preferences, used);
         stopPlans.push(choice);
         used.add(choice.name);
@@ -1073,7 +1180,8 @@
       for (let month = 1; month <= totalMonths; month += 1) {
         const stopIndex = Math.min(Math.floor((month - 1) / monthsPerStop), stopPlans.length - 1);
         const stop = stopPlans[stopIndex] || stopPlans[0];
-        itinerary.push({ month, stop });
+        const calendarMonth = wrapMonth(preferences.startMonth, month - 1);
+        itinerary.push({ month, calendarMonth, stop });
       }
 
       return { itinerary, stops };
@@ -1088,26 +1196,131 @@
       }
 
       const content = items
-        .map(
-          ({ month, stop }) => `
+        .map(({ month, calendarMonth, stop }) => {
+          const monthLabel = monthNames[calendarMonth - 1] || `Month ${calendarMonth}`;
+          return `
             <div class="itinerary-item">
-              <h4>Month ${month}: ${stop.location}</h4>
+              <h4>Month ${month} (${monthLabel}): ${stop.location}</h4>
               <p class="itinerary-meta">${stop.region} — ${stop.name}</p>
               <p class="subtle">Why this fits: ${stop.reason}</p>
               <p class="itinerary-anchors">Anchor cities: ${stop.anchors.join(', ')}</p>
             </div>
-          `
-        )
+          `;
+        })
         .join('');
 
       itineraryResults.innerHTML = content;
       copyItineraryButton.disabled = false;
 
       const copyBlock = items
-        .map(({ month, stop }) => `Month ${month}: ${stop.location} — ${stop.region} / ${stop.name}. Why: ${stop.reason}. Anchors: ${stop.anchors.join(', ')}`)
+        .map(({ month, calendarMonth, stop }) => {
+          const monthLabel = monthNames[calendarMonth - 1] || `Month ${calendarMonth}`;
+          return `Month ${month} (${monthLabel}): ${stop.location} — ${stop.region} / ${stop.name}. Why: ${stop.reason}. Anchors: ${stop.anchors.join(', ')}`;
+        })
         .join('\n');
 
       return `${summaryLine}\n${copyBlock}`;
+    };
+
+    const getItineraryStateFromForm = () => {
+      const avoidValues = Array.from(itineraryAvoid?.selectedOptions || []).map((option) => option.value);
+
+      return {
+        length: parseInt(document.getElementById('itinerary-length')?.value, 10),
+        pace: document.getElementById('itinerary-pace')?.value || defaultItineraryState.pace,
+        climate: document.getElementById('itinerary-climate')?.value || defaultItineraryState.climate,
+        vibe: document.getElementById('itinerary-vibe')?.value || defaultItineraryState.vibe,
+        budget: document.getElementById('itinerary-budget')?.value || defaultItineraryState.budget,
+        avoid: avoidValues,
+        startMonth: normalizeMonth(itineraryStartMonth?.value || defaultItineraryState.startMonth),
+      };
+    };
+
+    const applyStateToForm = (state) => {
+      if (document.getElementById('itinerary-length')) {
+        document.getElementById('itinerary-length').value = String(state.length ?? defaultItineraryState.length);
+      }
+      if (document.getElementById('itinerary-pace')) {
+        document.getElementById('itinerary-pace').value = state.pace ?? defaultItineraryState.pace;
+      }
+      if (document.getElementById('itinerary-climate')) {
+        document.getElementById('itinerary-climate').value = state.climate ?? defaultItineraryState.climate;
+      }
+      if (document.getElementById('itinerary-vibe')) {
+        document.getElementById('itinerary-vibe').value = state.vibe ?? defaultItineraryState.vibe;
+      }
+      if (document.getElementById('itinerary-budget')) {
+        document.getElementById('itinerary-budget').value = state.budget ?? defaultItineraryState.budget;
+      }
+      if (itineraryStartMonth) {
+        itineraryStartMonth.value = String(state.startMonth ?? defaultItineraryState.startMonth);
+      }
+      if (itineraryAvoid) {
+        const selected = new Set(state.avoid || []);
+        Array.from(itineraryAvoid.options).forEach((option) => {
+          option.selected = selected.has(option.value);
+        });
+      }
+    };
+
+    const stateToQuery = (state) => {
+      const params = new URLSearchParams();
+      params.set('length', state.length ?? defaultItineraryState.length);
+      params.set('pace', state.pace ?? defaultItineraryState.pace);
+      params.set('climate', state.climate ?? defaultItineraryState.climate);
+      params.set('vibe', state.vibe ?? defaultItineraryState.vibe);
+      params.set('budget', state.budget ?? defaultItineraryState.budget);
+      params.set('startMonth', state.startMonth ?? defaultItineraryState.startMonth);
+      if (state.avoid?.length) {
+        params.set('avoid', state.avoid.join(','));
+      }
+      return `?${params.toString()}`;
+    };
+
+    const queryToState = () => {
+      const params = new URLSearchParams(window.location.search);
+
+      const avoidParam = params.get('avoid');
+      const avoid = avoidParam ? avoidParam.split(',').filter(Boolean) : [];
+
+      return {
+        length: parseInt(params.get('length') || '', 10) || defaultItineraryState.length,
+        pace: params.get('pace') || defaultItineraryState.pace,
+        climate: params.get('climate') || defaultItineraryState.climate,
+        vibe: params.get('vibe') || defaultItineraryState.vibe,
+        budget: params.get('budget') || defaultItineraryState.budget,
+        avoid,
+        startMonth: normalizeMonth(params.get('startMonth') || defaultItineraryState.startMonth),
+      };
+    };
+
+    const updateUrlFromState = (state) => {
+      const query = stateToQuery(state);
+      const newUrl = `${window.location.pathname}${query}${window.location.hash}`;
+      window.history.replaceState({}, '', newUrl);
+    };
+
+    const generateItinerary = (state, options = { skipUrlUpdate: false }) => {
+      const validLengths = [3, 6, 9, 12];
+      const tripLength = validLengths.includes(state.length) ? state.length : defaultItineraryState.length;
+
+      const preferences = {
+        climate: state.climate,
+        vibe: state.vibe,
+        budget: state.budget,
+        avoid: state.avoid,
+        startMonth: state.startMonth,
+      };
+
+      const { itinerary, stops } = buildItinerary(tripLength, state.pace, preferences);
+      const flights = Math.max(0, stops - 1);
+      const summaryLine = `${stops} stops, ~${flights} flight hops starting in ${monthNames[state.startMonth - 1] || 'Month'}. Use this as a planning starting point and adjust for visas + rhythm.`;
+
+      latestItineraryText = renderItinerary(itinerary, summaryLine);
+
+      if (!options.skipUrlUpdate) {
+        updateUrlFromState({ ...state, length: tripLength });
+      }
     };
 
     let latestItineraryText = '';
@@ -1115,27 +1328,13 @@
     itineraryForm?.addEventListener('submit', (event) => {
       event.preventDefault();
 
-      const length = parseInt(document.getElementById('itinerary-length')?.value, 10);
-      const pace = document.getElementById('itinerary-pace')?.value || 'balanced';
-      const climate = document.getElementById('itinerary-climate')?.value || 'mixed';
-      const vibe = document.getElementById('itinerary-vibe')?.value || 'mixed';
-      const budget = document.getElementById('itinerary-budget')?.value || 'comfortable';
-
-      const validLengths = [3, 6, 9, 12];
-      const tripLength = validLengths.includes(length) ? length : 6;
-
-      const preferences = {
-        climate,
-        vibe,
-        budget,
-      };
-
-      const { itinerary, stops } = buildItinerary(tripLength, pace, preferences);
-      const flights = Math.max(0, stops - 1);
-      const summaryLine = `${stops} stops, ~${flights} flight hops. Use this as a planning starting point and adjust for visas + rhythm.`;
-
-      latestItineraryText = renderItinerary(itinerary, summaryLine);
+      const formState = getItineraryStateFromForm();
+      generateItinerary(formState);
     });
+
+    const initialState = queryToState();
+    applyStateToForm(initialState);
+    generateItinerary(initialState, { skipUrlUpdate: true });
 
     copyItineraryButton?.addEventListener('click', async () => {
       if (!latestItineraryText) return;
