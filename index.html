@@ -204,10 +204,18 @@
       box-shadow: 0 10px 45px rgba(0, 0, 0, 0.35);
     }
 
+    .hero-gallery {
+      margin: 0;
+    }
+
     .hero-caption {
       margin-top: 0.8rem;
       color: var(--muted);
       font-size: 0.95rem;
+    }
+
+    .hero-place-toggle {
+      margin-top: 1rem;
     }
 
     .toggle-row {
@@ -481,12 +489,12 @@
         <h1>Sabbaticals for people who refuse to burn out.</h1>
         <p id="hero-subheadline">Design a career break with clarity, numbers that add up, and places that light you up. No fluff—just tools, templates, and coaching to make your year off actually happen.</p>
         <div class="toggle-row" aria-label="Values toggles">
-          <button class="pill-toggle" type="button" data-mode="adventure" aria-pressed="false">Adventure</button>
-          <button class="pill-toggle" type="button" data-mode="comfort" aria-pressed="true">Comfort</button>
-          <button class="pill-toggle" type="button" data-mode="clarity" aria-pressed="false">Clarity</button>
+          <button class="pill-toggle tone-toggle" type="button" data-mode="adventure" aria-pressed="false">Adventure</button>
+          <button class="pill-toggle tone-toggle" type="button" data-mode="comfort" aria-pressed="true">Comfort</button>
+          <button class="pill-toggle tone-toggle" type="button" data-mode="clarity" aria-pressed="false">Clarity</button>
         </div>
         <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
-          <a class="primary-btn" href="https://thesabbaticalist.substack.com" target="_blank" rel="noopener">Join the newsletter</a>
+          <a class="primary-btn" href="https://substack.com/@sbwinston" target="_blank" rel="noopener">Join the newsletter</a>
           <a class="ghost-btn" href="#toolkit">Browse the toolkit</a>
         </div>
         <div class="runway-preview" aria-live="polite">
@@ -499,9 +507,15 @@
           <a href="#calculators">See full calculator →</a>
         </div>
       </div>
-      <div class="hero-visual" aria-hidden="true">
-        <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1000&q=80" alt="Mountain overlook" loading="lazy" />
-        <div class="hero-caption" id="hero-caption">Places that restore you.</div>
+      <div class="hero-visual">
+        <figure class="hero-gallery">
+          <img id="hero-image" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=80" alt="Sunlit cliffs over the Amalfi Coast" loading="lazy" />
+          <figcaption class="hero-caption" id="hero-caption">Amalfi Coast, Italy</figcaption>
+        </figure>
+        <div class="toggle-row hero-place-toggle" aria-label="Featured places">
+          <button class="pill-toggle place-toggle" type="button" data-place="amalfi" aria-pressed="true">Amalfi Coast</button>
+          <button class="pill-toggle place-toggle" type="button" data-place="dolomites" aria-pressed="false">Dolomites</button>
+        </div>
       </div>
     </section>
 
@@ -522,7 +536,7 @@
         <article class="card">
           <h3>Community</h3>
           <p class="subtle">Monthly live Q&A sessions with people planning their own breaks.</p>
-          <a class="ghost-btn" href="mailto:hello@thesabbaticalist.com">Say hi</a>
+          <a class="ghost-btn" href="mailto:sbwinston@gmail.com">Say hi</a>
         </article>
       </div>
     </section>
@@ -681,22 +695,22 @@
         <article class="card">
           <h3>Nomatic Travel Pack</h3>
           <p class="subtle">One-bag setup with compression cubes.</p>
-          <a class="primary-btn" href="https://www.amazon.com/dp/B07RZVYMZ3" target="_blank" rel="noopener">View on Amazon</a>
+          <a class="primary-btn" href="https://www.amazon.com/s?k=Nomatic+Travel+Pack" target="_blank" rel="noopener">View on Amazon</a>
         </article>
         <article class="card">
           <h3>Universal adapter</h3>
           <p class="subtle">Two USB-C ports plus surge protection.</p>
-          <a class="primary-btn" href="https://www.amazon.com/dp/B082P7ZQCY" target="_blank" rel="noopener">View on Amazon</a>
+          <a class="primary-btn" href="https://www.amazon.com/s?k=universal+travel+adapter+usb+c" target="_blank" rel="noopener">View on Amazon</a>
         </article>
         <article class="card">
           <h3>Noise cancelling headphones</h3>
           <p class="subtle">To survive overnight buses and open offices.</p>
-          <a class="primary-btn" href="https://www.amazon.com/dp/B09JYVY5FY" target="_blank" rel="noopener">View on Amazon</a>
+          <a class="primary-btn" href="https://www.amazon.com/s?k=noise+cancelling+headphones+travel" target="_blank" rel="noopener">View on Amazon</a>
         </article>
         <article class="card">
           <h3>Kindle Paperwhite</h3>
           <p class="subtle">4,000 books, zero extra kilos.</p>
-          <a class="primary-btn" href="https://www.amazon.com/dp/B08KTZ8249" target="_blank" rel="noopener">View on Amazon</a>
+          <a class="primary-btn" href="https://www.amazon.com/s?k=kindle+paperwhite" target="_blank" rel="noopener">View on Amazon</a>
         </article>
       </div>
       <p class="subtle" style="margin-top:1rem;">These are placeholder links—replace them with your own once your affiliate program is approved.</p>
@@ -706,7 +720,7 @@
       <h2>🧭 Want a sanity check?</h2>
       <p>Send me your rough plan. I’ll tell you if it’s realistic, where to slow down, and how to keep your savings intact.</p>
       <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;">
-        <a class="primary-btn" href="mailto:hello@thesabbaticalist.com">Email hello@thesabbaticalist.com</a>
+        <a class="primary-btn" href="mailto:sbwinston@gmail.com">Email sbwinston@gmail.com</a>
         <span class="pill">24h response for subscribers</span>
       </div>
     </section>
@@ -720,26 +734,21 @@
     const tonePresets = {
       adventure: {
         sub: 'Places that stretch you. Swap routine for range: treks, new skills, and friends you haven’t met yet.',
-        caption: 'Routes that challenge you and gift you better stories.',
       },
       comfort: {
         sub: 'Places that restore you. Soft landings, slower mornings, and meals that feel like home.',
-        caption: 'Rooms with warm light, easy trails, and time that drips instead of sprints.',
       },
       clarity: {
         sub: 'Plans you can trust. Visas sorted, budgets clear, and a pace that lets you think again.',
-        caption: 'Itineraries with breathing room and decisions you’ve already made.',
       },
     };
 
-    const toggleButtons = document.querySelectorAll('.pill-toggle');
+    const toggleButtons = document.querySelectorAll('.tone-toggle');
     const heroSubheadline = document.getElementById('hero-subheadline');
-    const heroCaption = document.getElementById('hero-caption');
 
     const setTone = (mode) => {
       const tone = tonePresets[mode] || tonePresets.comfort;
       heroSubheadline.textContent = tone.sub;
-      heroCaption.textContent = tone.caption;
       toggleButtons.forEach((btn) => {
         const isActive = btn.dataset.mode === mode;
         btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
@@ -751,6 +760,41 @@
         setTone(btn.dataset.mode);
       })
     );
+
+    const heroPlaces = {
+      amalfi: {
+        src: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=80',
+        alt: 'Sunlit cliffs over the Amalfi Coast',
+        caption: 'Amalfi Coast, Italy',
+      },
+      dolomites: {
+        src: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=80',
+        alt: 'Alpine lake surrounded by the Dolomites',
+        caption: 'Dolomites, Italy',
+      },
+    };
+
+    const placeButtons = document.querySelectorAll('.place-toggle');
+    const heroImage = document.getElementById('hero-image');
+    const heroCaption = document.getElementById('hero-caption');
+
+    const setPlace = (placeKey) => {
+      const place = heroPlaces[placeKey] || heroPlaces.amalfi;
+      heroImage.src = place.src;
+      heroImage.alt = place.alt;
+      heroCaption.textContent = place.caption;
+
+      placeButtons.forEach((btn) => {
+        const isActive = btn.dataset.place === placeKey;
+        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      });
+    };
+
+    placeButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        setPlace(btn.dataset.place);
+      });
+    });
 
     const savingsSlider = document.getElementById('preview-savings');
     const savingsNumber = document.getElementById('preview-savings-number');
@@ -780,6 +824,7 @@
     });
 
     setTone('comfort');
+    setPlace('amalfi');
     updateRunwayPreview(savingsSlider?.value || 50000);
 
     const budgetForm = document.getElementById('budget-form');
