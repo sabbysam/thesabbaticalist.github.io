@@ -197,25 +197,45 @@
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
     }
 
-    .hero-visual img {
-      width: 100%;
-      border-radius: 14px;
-      display: block;
-      box-shadow: 0 10px 45px rgba(0, 0, 0, 0.35);
-    }
-
     .hero-gallery {
       margin: 0;
+    }
+
+    .hero-carousel {
+      position: relative;
+      width: 100%;
+      border-radius: 14px;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      box-shadow: 0 10px 45px rgba(0, 0, 0, 0.35);
+      background: rgba(8, 16, 28, 0.8);
+    }
+
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: translateX(12px);
+      transition: opacity 0.7s ease-in-out, transform 0.7s ease-in-out;
+    }
+
+    .hero-slide.is-active {
+      opacity: 1;
+      transform: translateX(0);
+      z-index: 1;
+    }
+
+    .hero-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     .hero-caption {
       margin-top: 0.8rem;
       color: var(--muted);
       font-size: 0.95rem;
-    }
-
-    .hero-place-toggle {
-      margin-top: 1rem;
     }
 
     .toggle-row {
@@ -326,6 +346,30 @@
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
       position: relative;
       overflow: hidden;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      will-change: opacity, transform;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero-content,
+    .hero-visual {
+      will-change: transform;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-slide,
+      .reveal {
+        transition: none;
+      }
     }
 
     .card::after {
@@ -509,31 +553,40 @@
       </div>
       <div class="hero-visual">
         <figure class="hero-gallery">
-          <img id="hero-image" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=80" alt="Sunlit cliffs over the Amalfi Coast" loading="lazy" />
+          <div class="hero-carousel" aria-live="off">
+            <div class="hero-slide is-active" data-caption="Amalfi Coast, Italy">
+              <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80" alt="Sunlit cliffs over the Amalfi Coast" loading="lazy" />
+            </div>
+            <div class="hero-slide" data-caption="Banff, Canada">
+              <img src="https://images.unsplash.com/photo-1449034446853-66c86144b0ad?auto=format&fit=crop&w=1200&q=80" alt="Turquoise alpine lake in Banff" loading="lazy" />
+            </div>
+            <div class="hero-slide" data-caption="Kyoto, Japan">
+              <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80" alt="Misty bamboo forest in Kyoto" loading="lazy" />
+            </div>
+            <div class="hero-slide" data-caption="Lisbon, Portugal">
+              <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=1200&q=80" alt="Sunset over the rooftops of Lisbon" loading="lazy" />
+            </div>
+          </div>
           <figcaption class="hero-caption" id="hero-caption">Amalfi Coast, Italy</figcaption>
         </figure>
-        <div class="toggle-row hero-place-toggle" aria-label="Featured places">
-          <button class="pill-toggle place-toggle" type="button" data-place="amalfi" aria-pressed="true">Amalfi Coast</button>
-          <button class="pill-toggle place-toggle" type="button" data-place="dolomites" aria-pressed="false">Dolomites</button>
-        </div>
       </div>
     </section>
 
-    <section class="section" id="toolkit">
+    <section class="section reveal" id="toolkit">
       <h2>🛠️ The Sabbatical Toolkit</h2>
       <p>Everything I wish I had before my first break: checklists, budgeting frameworks, and ready-to-use planning templates.</p>
       <div class="cards">
-        <article class="card">
+        <article class="card reveal">
           <h3>Planning Checklist</h3>
           <p class="subtle">Visa research, notice periods, health, housing, insurance, and the exact sequencing to keep you sane.</p>
           <a class="primary-btn" href="https://drive.google.com" target="_blank" rel="noopener">Download checklist</a>
         </article>
-        <article class="card">
+        <article class="card reveal">
           <h3>Budget Template</h3>
           <p class="subtle">Built for year-long travel with real numbers and contingency buffers.</p>
           <a class="ghost-btn" href="#calculators">Estimate costs</a>
         </article>
-        <article class="card">
+        <article class="card reveal">
           <h3>Community</h3>
           <p class="subtle">Monthly live Q&A sessions with people planning their own breaks.</p>
           <a class="ghost-btn" href="mailto:sbwinston@gmail.com">Say hi</a>
@@ -545,7 +598,7 @@
       <h2>💸 Quick calculators</h2>
       <p>Get a fast read on what your sabbatical might cost and how to travel lighter on the planet.</p>
       <div class="cards">
-        <article class="card">
+        <article class="card reveal">
           <h3>Sabbatical budget</h3>
           <form id="budget-form">
             <label>Flights <input type="number" id="budget-flights" min="0" step="0.01" inputmode="decimal" placeholder="1200" /></label>
@@ -555,7 +608,7 @@
           </form>
           <p id="budget-result" class="subtle" aria-live="polite"></p>
         </article>
-        <article class="card">
+        <article class="card reveal">
           <h3>Carbon estimate</h3>
           <form id="carbon-form">
             <label>Roundtrip miles <input type="number" id="carbon-miles" min="0" step="1" inputmode="numeric" placeholder="9000" /></label>
@@ -563,7 +616,7 @@
           </form>
           <p id="carbon-result" class="subtle" aria-live="polite"></p>
         </article>
-        <article class="card">
+        <article class="card reveal">
           <h3>Cost &amp; Runway calculator</h3>
           <form id="runway-form">
             <label>Starting savings <input type="number" id="runway-savings" min="0" step="100" inputmode="decimal" value="20000" required /></label>
@@ -588,7 +641,7 @@
           </form>
           <p id="runway-result" class="subtle" aria-live="polite"></p>
         </article>
-        <article class="card">
+        <article class="card reveal">
           <h3>Itinerary generator</h3>
           <form id="itinerary-form">
             <label>Trip length (months)
@@ -663,51 +716,51 @@
       </div>
     </section>
 
-    <section class="section" id="plan">
+    <section class="section reveal" id="plan">
       <h2>📊 Explore a real sabbatical plan</h2>
       <p>Steal the template I use with coaching clients—dates, flights, costs, and a pace that avoids burnout.</p>
       <a class="primary-btn" href="Final_365-Day_Sabbatical__Max_30_Days_Rule___Flight_Costs_.csv" download>Download the CSV</a>
     </section>
 
-    <section class="section" id="calendar">
+    <section class="section reveal" id="calendar">
       <h2>📅 Where to go, month by month</h2>
       <p>Built for weather, crowds, and vibe. Swap months as your preferences demand.</p>
       <div class="calendar-grid">
-        <div class="card"><h3>January</h3><p class="subtle">New Zealand — alpine summer trails.</p></div>
-        <div class="card"><h3>February</h3><p class="subtle">Thailand — dry season islands.</p></div>
-        <div class="card"><h3>March</h3><p class="subtle">Japan — slow hanami in Kyoto.</p></div>
-        <div class="card"><h3>April</h3><p class="subtle">Portugal — shoulder season sun.</p></div>
-        <div class="card"><h3>May</h3><p class="subtle">Peru — trekking without the crowds.</p></div>
-        <div class="card"><h3>June</h3><p class="subtle">Albania — Adriatic beaches minus the price tag.</p></div>
-        <div class="card"><h3>July</h3><p class="subtle">Georgia — mountain air and wine country.</p></div>
-        <div class="card"><h3>August</h3><p class="subtle">Indonesia — surf & slow villages.</p></div>
-        <div class="card"><h3>September</h3><p class="subtle">Italy — Apennine hikes + empty museums.</p></div>
-        <div class="card"><h3>October</h3><p class="subtle">Chile — Patagonian spring.</p></div>
-        <div class="card"><h3>November</h3><p class="subtle">Vietnam — cool northern treks.</p></div>
-        <div class="card"><h3>December</h3><p class="subtle">Argentina — warm city nights.</p></div>
+        <div class="card reveal"><h3>January</h3><p class="subtle">New Zealand — alpine summer trails.</p></div>
+        <div class="card reveal"><h3>February</h3><p class="subtle">Thailand — dry season islands.</p></div>
+        <div class="card reveal"><h3>March</h3><p class="subtle">Japan — slow hanami in Kyoto.</p></div>
+        <div class="card reveal"><h3>April</h3><p class="subtle">Portugal — shoulder season sun.</p></div>
+        <div class="card reveal"><h3>May</h3><p class="subtle">Peru — trekking without the crowds.</p></div>
+        <div class="card reveal"><h3>June</h3><p class="subtle">Albania — Adriatic beaches minus the price tag.</p></div>
+        <div class="card reveal"><h3>July</h3><p class="subtle">Georgia — mountain air and wine country.</p></div>
+        <div class="card reveal"><h3>August</h3><p class="subtle">Indonesia — surf & slow villages.</p></div>
+        <div class="card reveal"><h3>September</h3><p class="subtle">Italy — Apennine hikes + empty museums.</p></div>
+        <div class="card reveal"><h3>October</h3><p class="subtle">Chile — Patagonian spring.</p></div>
+        <div class="card reveal"><h3>November</h3><p class="subtle">Vietnam — cool northern treks.</p></div>
+        <div class="card reveal"><h3>December</h3><p class="subtle">Argentina — warm city nights.</p></div>
       </div>
     </section>
 
-    <section class="section" id="gear">
+    <section class="section reveal" id="gear">
       <h2>🎒 Travel gear I actually use</h2>
       <p>Curated essentials built for long-term travel. Swap in your own affiliate links when you’re ready.</p>
       <div class="cards">
-        <article class="card">
+        <article class="card reveal">
           <h3>Nomatic Travel Pack</h3>
           <p class="subtle">One-bag setup with compression cubes.</p>
           <a class="primary-btn" href="https://www.amazon.com/s?k=Nomatic+Travel+Pack" target="_blank" rel="noopener">View on Amazon</a>
         </article>
-        <article class="card">
+        <article class="card reveal">
           <h3>Universal adapter</h3>
           <p class="subtle">Two USB-C ports plus surge protection.</p>
           <a class="primary-btn" href="https://www.amazon.com/s?k=universal+travel+adapter+usb+c" target="_blank" rel="noopener">View on Amazon</a>
         </article>
-        <article class="card">
+        <article class="card reveal">
           <h3>Noise cancelling headphones</h3>
           <p class="subtle">To survive overnight buses and open offices.</p>
           <a class="primary-btn" href="https://www.amazon.com/s?k=noise+cancelling+headphones+travel" target="_blank" rel="noopener">View on Amazon</a>
         </article>
-        <article class="card">
+        <article class="card reveal">
           <h3>Kindle Paperwhite</h3>
           <p class="subtle">4,000 books, zero extra kilos.</p>
           <a class="primary-btn" href="https://www.amazon.com/s?k=kindle+paperwhite" target="_blank" rel="noopener">View on Amazon</a>
@@ -716,7 +769,7 @@
       <p class="subtle" style="margin-top:1rem;">These are placeholder links—replace them with your own once your affiliate program is approved.</p>
     </section>
 
-    <section class="section" id="contact">
+    <section class="section reveal" id="contact">
       <h2>🧭 Want a sanity check?</h2>
       <p>Send me your rough plan. I’ll tell you if it’s realistic, where to slow down, and how to keep your savings intact.</p>
       <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;">
@@ -761,40 +814,81 @@
       })
     );
 
-    const heroPlaces = {
-      amalfi: {
-        src: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=80',
-        alt: 'Sunlit cliffs over the Amalfi Coast',
-        caption: 'Amalfi Coast, Italy',
-      },
-      dolomites: {
-        src: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=80',
-        alt: 'Alpine lake surrounded by the Dolomites',
-        caption: 'Dolomites, Italy',
-      },
-    };
-
-    const placeButtons = document.querySelectorAll('.place-toggle');
-    const heroImage = document.getElementById('hero-image');
     const heroCaption = document.getElementById('hero-caption');
+    const heroSlides = Array.from(document.querySelectorAll('.hero-slide'));
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let heroSlideIndex = 0;
 
-    const setPlace = (placeKey) => {
-      const place = heroPlaces[placeKey] || heroPlaces.amalfi;
-      heroImage.src = place.src;
-      heroImage.alt = place.alt;
-      heroCaption.textContent = place.caption;
-
-      placeButtons.forEach((btn) => {
-        const isActive = btn.dataset.place === placeKey;
-        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-      });
+    const updateHeroCaption = (slide) => {
+      const caption = slide?.dataset?.caption;
+      if (caption && heroCaption) {
+        heroCaption.textContent = caption;
+      }
     };
 
-    placeButtons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        setPlace(btn.dataset.place);
+    const setActiveHeroSlide = (index) => {
+      heroSlides.forEach((slide, idx) => {
+        slide.classList.toggle('is-active', idx === index);
       });
-    });
+      updateHeroCaption(heroSlides[index]);
+    };
+
+    const advanceHeroSlide = () => {
+      if (heroSlides.length <= 1) return;
+      heroSlideIndex = (heroSlideIndex + 1) % heroSlides.length;
+      setActiveHeroSlide(heroSlideIndex);
+    };
+
+    if (heroSlides.length) {
+      setActiveHeroSlide(heroSlideIndex);
+      if (!prefersReducedMotion) {
+        setInterval(advanceHeroSlide, 5200);
+      }
+    }
+
+    const heroContent = document.querySelector('.hero-content');
+    const heroVisual = document.querySelector('.hero-visual');
+    let parallaxFrame = null;
+
+    const updateHeroParallax = () => {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const contentOffset = Math.min(scrollY * 0.12, 60);
+      const visualOffset = Math.min(scrollY * 0.08, 50);
+      if (heroContent) {
+        heroContent.style.transform = `translateY(${contentOffset}px)`;
+      }
+      if (heroVisual) {
+        heroVisual.style.transform = `translateY(${visualOffset}px)`;
+      }
+      parallaxFrame = null;
+    };
+
+    const handleParallaxScroll = () => {
+      if (parallaxFrame !== null) return;
+      parallaxFrame = window.requestAnimationFrame(updateHeroParallax);
+    };
+
+    window.addEventListener('scroll', handleParallaxScroll, { passive: true });
+    updateHeroParallax();
+
+    const revealElements = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      const revealObserver = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.18 }
+      );
+
+      revealElements.forEach((element) => revealObserver.observe(element));
+    } else {
+      revealElements.forEach((element) => element.classList.add('is-visible'));
+    }
 
     const savingsSlider = document.getElementById('preview-savings');
     const savingsNumber = document.getElementById('preview-savings-number');
@@ -824,7 +918,6 @@
     });
 
     setTone('comfort');
-    setPlace('amalfi');
     updateRunwayPreview(savingsSlider?.value || 50000);
 
     const budgetForm = document.getElementById('budget-form');
