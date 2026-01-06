@@ -143,12 +143,14 @@
       margin: 4rem auto 3rem;
       padding: 3rem 1.5rem 4.75rem;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: minmax(0, 1fr);
       gap: 2rem;
       align-items: center;
       transition: padding 0.5s ease, margin 0.5s ease, border-color 0.5s ease;
       border-bottom: 1px solid transparent;
       overflow: visible;
+      position: relative;
+      isolation: isolate;
     }
 
     .hero.is-collapsed {
@@ -221,66 +223,34 @@
       outline: none;
     }
 
-    .hero-visual {
-      background: transparent;
-      border: none;
-      border-radius: 0;
-      padding: 0;
-      box-shadow: none;
-      transition: transform 0.6s ease;
-      transform: translateY(var(--hero-offset, 0px)) scale(var(--hero-scale, 1));
-    }
-
-    .hero.is-collapsed .hero-visual {
-      transform: translateY(var(--hero-offset, 0px)) scale(var(--hero-scale, 1));
-    }
-
-    .hero-gallery {
-      margin: 0;
-    }
-
-    .image-sequence {
-      position: relative;
-      width: 100%;
-      border-radius: 18px;
-      overflow: hidden;
-      aspect-ratio: 4 / 3;
-      box-shadow: 0 18px 44px rgba(47, 42, 36, 0.16);
-      background: rgba(245, 238, 230, 0.85);
-    }
-
-    .image-sequence::before {
+    .hero::before {
       content: '';
       position: absolute;
-      inset: 0;
-      background: linear-gradient(140deg, rgba(47, 42, 36, 0.06), rgba(47, 42, 36, 0.18));
-      pointer-events: none;
-      z-index: 2;
+      inset: -6rem -4rem;
+      background-image: url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1800&q=80');
+      background-size: cover;
+      background-position: center;
+      transform: translateY(var(--hero-backdrop-offset, 0px));
+      transition: transform 0.4s ease-out;
+      filter: saturate(0.85) contrast(0.95) blur(0.2px);
+      z-index: 0;
+      animation: hero-drift 28s ease-in-out infinite alternate;
     }
 
-    .sequence-frame {
+    .hero::after {
+      content: '';
       position: absolute;
-      inset: 0;
-      opacity: 0;
-      transition: opacity 1.6s ease-in-out;
+      inset: -6rem -4rem;
+      background: linear-gradient(120deg, rgba(244, 239, 231, 0.9) 10%, rgba(244, 239, 231, 0.6) 45%, rgba(244, 239, 231, 0.3) 100%),
+        radial-gradient(circle at 20% 20%, rgba(47, 42, 36, 0.2), transparent 55%);
+      z-index: 0;
+      pointer-events: none;
     }
 
-    .sequence-frame.is-active {
-      opacity: 1;
+    .hero-content {
+      position: relative;
       z-index: 1;
-    }
-
-    .sequence-frame img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transform: scale(1);
-      transition: transform var(--sequence-duration, 6200ms) ease-in-out;
-    }
-
-    .sequence-frame.is-active img {
-      transform: scale(1.03);
+      max-width: 620px;
     }
 
     .toggle-row {
@@ -407,8 +377,7 @@
       transform: translateY(0);
     }
 
-    .hero-content,
-    .hero-visual {
+    .hero-content {
       will-change: transform;
     }
 
@@ -452,14 +421,13 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .sequence-frame,
       .reveal {
         transition: none;
       }
 
-      .sequence-frame img {
-        transition: none;
-        transform: scale(1);
+      .hero::before {
+        animation: none;
+        transform: none;
       }
     }
 
@@ -634,9 +602,12 @@
       }
     }
 
-    @media (min-width: 900px) {
-      .hero-visual {
-        margin-right: -3.5rem;
+    @keyframes hero-drift {
+      0% {
+        background-position: 45% 45%;
+      }
+      100% {
+        background-position: 55% 55%;
       }
     }
   </style>
@@ -686,24 +657,6 @@
           </div>
           <p class="runway-result">That’s <strong id="preview-months">~11</strong> months of travel at a $4,500/mo pace.</p>
           <a href="#calculators">See full calculator →</a>
-        </div>
-      </div>
-      <div class="hero-visual">
-        <div class="hero-gallery">
-          <div class="image-sequence" data-interval="6200" aria-live="off">
-            <div class="sequence-frame is-active">
-              <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80" alt="Morning light filtering through a bamboo grove in Kyoto" loading="lazy" />
-            </div>
-            <div class="sequence-frame">
-              <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80" alt="Coastal cliffs with a winding road above the sea" loading="lazy" />
-            </div>
-            <div class="sequence-frame">
-              <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80" alt="Small figures walking along a desert ridge at dusk" loading="lazy" />
-            </div>
-            <div class="sequence-frame">
-              <img src="https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1200&q=80" alt="Historic city rooftops glowing at sunset" loading="lazy" />
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -956,40 +909,10 @@
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Reusable editorial image sequence (crossfades + gentle scale).
-    const initImageSequence = (container, options = {}) => {
-      if (!container) return null;
-      const frames = Array.from(container.querySelectorAll('.sequence-frame'));
-      if (frames.length <= 1) return null;
-
-      // Editorial cadence: 6.2s keeps the rotation between the 5–7s guidance.
-      const interval = Number(container.dataset.interval) || options.interval || 6200;
-      container.style.setProperty('--sequence-duration', `${interval}ms`);
-
-      let currentIndex = 0;
-      const setActiveFrame = (index) => {
-        frames.forEach((frame, idx) => {
-          frame.classList.toggle('is-active', idx === index);
-        });
-      };
-
-      setActiveFrame(currentIndex);
-
-      if (prefersReducedMotion) return null;
-
-      return window.setInterval(() => {
-        currentIndex = (currentIndex + 1) % frames.length;
-        setActiveFrame(currentIndex);
-      }, interval);
-    };
-
-    initImageSequence(document.querySelector('.image-sequence'));
-
     // Scroll-driven motion + reveals live in one utility for easy tuning.
     const initScrollEffects = () => {
       const heroSection = document.querySelector('.hero');
       const heroContent = document.querySelector('.hero-content');
-      const heroVisual = document.querySelector('.hero-visual');
       const progressIndicator = document.querySelector('.section-progress');
       const scaleTargets = Array.from(document.querySelectorAll('.scale-shift'));
       const revealElements = document.querySelectorAll('.reveal');
@@ -1002,21 +925,16 @@
 
         if (!prefersReducedMotion) {
           const contentOffset = Math.min(scrollY * 0.12, 60);
-          const visualOffset = Math.min(scrollY * 0.08, 50);
           if (heroContent) {
             heroContent.style.transform = `translateY(${contentOffset}px)`;
           }
-          if (heroVisual) {
-            const heroScale = 1.05 - Math.min(scrollY / 520, 1) * 0.05;
-            heroVisual.style.setProperty('--hero-offset', `${visualOffset}px`);
-            heroVisual.style.setProperty('--hero-scale', heroScale.toFixed(3));
+          if (heroSection) {
+            const backdropOffset = Math.min(scrollY * 0.06, 40);
+            heroSection.style.setProperty('--hero-backdrop-offset', `${backdropOffset}px`);
           }
         } else {
           if (heroContent) heroContent.style.transform = '';
-          if (heroVisual) {
-            heroVisual.style.setProperty('--hero-offset', '0px');
-            heroVisual.style.setProperty('--hero-scale', '1');
-          }
+          if (heroSection) heroSection.style.setProperty('--hero-backdrop-offset', '0px');
         }
 
         if (heroSection) {
